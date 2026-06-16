@@ -1,7 +1,7 @@
 {
   "name": "carepath",
   "version": "1.0.0",
-  "description": "Transportation coordination tool for patients in rural/low-income areas — Builders & Backers Mobility Program",
+  "description": "Transportation coordination tool for patients anywhere in the country — Builders & Backers Mobility Program",
   "main": "dist/server.js",
   "scripts": {
     "start": "node dist/server.js",

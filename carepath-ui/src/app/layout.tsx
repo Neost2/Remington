@@ -6,7 +6,7 @@ const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
 
 export const metadata: Metadata = {
   title: 'CarePath',
-  description: 'Transportation coordination for patients in rural and low-income areas',
+  description: 'Transportation coordination for patients anywhere in the country',
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

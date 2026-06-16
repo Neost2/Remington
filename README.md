@@ -1,10 +1,10 @@
 # CarePath
 
-CarePath is a transportation coordination tool that assists patients in rural or low-income areas in arranging reliable transportation options for traveling over 10 miles to specialty medical appointments, aiming to reduce no-shows and improve access to essential healthcare.
+CarePath is a transportation coordination tool that helps patients anywhere in the country arrange reliable rides to medical appointments, aiming to reduce no-shows and improve access to essential healthcare.
 
 ## Validation Workspace (Early Discovery)
 
-This repository includes a lightweight validation pre-pack used to capture founder interviews and prepare evidence for investor and cohort updates.
+This repository includes a lightweight validation pre-pack used to capture founder interviews and prepare evidence for investor and cohort updates across any geography.
 
 ### Location
 

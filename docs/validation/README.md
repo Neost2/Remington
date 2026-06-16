@@ -1,6 +1,6 @@
 # CarePath Validation Pre-Pack
 
-This lightweight pre-pack helps you capture outreach conversations consistently and prepare for a Donna Harris submission once you reach at least 10 interviews.
+This lightweight pre-pack helps you capture outreach conversations consistently and prepare for a Donna Harris submission once you reach at least 10 interviews, whether the users are in rural, suburban, or urban areas.
 
 ## Files
 
@@ -8,6 +8,7 @@ This lightweight pre-pack helps you capture outreach conversations consistently 
 - `signal-rubric.md`: Standard scoring (Weak/Medium/Strong).
 - `synthesis-template.md`: Quick summary template to update after each interview.
 - `synthesis-log.md`: Running cross-interview synthesis notes.
+- `ai-builder-handoff.md`: Re-entry checklist and input pack for AI Builder.
 - `case-studies/`: Structured case-study writeups by conversation.
 
 ## How To Use
