@@ -1,6 +1,6 @@
 # CarePath Validation Pre-Pack
 
-This lightweight pre-pack helps you capture outreach conversations consistently and prepare for a Donna Harris submission once you reach at least 10 interviews, whether the users are in rural, suburban, or urban areas.
+This lightweight pre-pack helps you capture outreach conversations consistently and prepare for a Donna Harris submission once you reach at least 10 interviews, for users in any area of the country.
 
 ## Files
 
