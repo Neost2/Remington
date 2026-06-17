@@ -35,6 +35,16 @@ This folder is the primary source of truth for:
 - `validation-to-feature-mapping.md` - How validation informs product features and roadmap.
 - `README.md` - Overview and usage guide for the validation knowledge base.
 
+## Growing This Knowledge Base
+
+As you complete more conversations over the next two weeks, keep extending this folder in three places:
+
+1. Add a new case study file for each interview.
+2. Update `patterns.md` with any repeated or emerging themes.
+3. Update `validation-to-feature-mapping.md` when a pattern clearly changes a product decision or pilot requirement.
+
+The goal is to keep the case studies as the raw evidence and the pattern/feature files as the living synthesis layer.
+
 ## Minimum Coverage Goal (Before Submission Pack)
 
 - At least 10 completed interviews
