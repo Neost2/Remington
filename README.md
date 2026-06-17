@@ -1,6 +1,10 @@
 # CarePath
 
+## About
+
 CarePath is a transportation coordination tool that helps patients anywhere in the country arrange reliable rides to medical appointments, aiming to reduce no-shows and improve access to essential healthcare.
+
+The project is focused on removing transportation and communication failures that cause missed care. It is being shaped through early validation conversations with patients, caregivers, and transportation stakeholders.
 
 ## Validation Workspace (Early Discovery)
 
