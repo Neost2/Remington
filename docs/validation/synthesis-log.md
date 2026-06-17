@@ -1,6 +1,6 @@
 # CarePath Rolling Synthesis Log
 
-## Through CP-004
+## Through CP-005
 
 ### What Repeated
 
@@ -11,6 +11,7 @@
 
 ### What Was New
 
+- Transportation barriers are impacting medication management and follow-up adherence, not only appointment attendance.
 - Healthcare professional perspective adds systemic and clinical credibility to problem severity.
 - Family-dependent transportation is common but unreliable due to schedule conflicts.
 - Public transportation coverage gaps are a factor in patient accessibility.
@@ -26,8 +27,8 @@
 
 ### Current Evidence Snapshot
 
-- Interviews logged: 4
-- Signal distribution: 4 Strong, 0 Medium, 0 Weak
+- Interviews logged: 5
+- Signal distribution: 5 Strong, 0 Medium, 0 Weak
 - Strongest recurring theme: reliability and communication breakdowns across transportation workflows
 
 ### Next Interview Targets
