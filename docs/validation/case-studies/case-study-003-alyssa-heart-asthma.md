@@ -69,3 +69,5 @@ Pilot priorities reinforced by this case:
 - Option pathway for dependable provider preference where policy allows
 
 This case strengthens the thesis that CarePath must solve both transparency and reliability, especially for high-risk patients.
+
+#tags: patient, heart, surgery, high-acuity, insurance-transportation, last-minute-cancelation, no-notification, missed-appointment, high-risk, loss-of-trust

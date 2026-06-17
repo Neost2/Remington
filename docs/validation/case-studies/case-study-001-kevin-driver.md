@@ -65,3 +65,5 @@ Justification:
 - Add earlier-warning logic to reduce ripple-effect delays
 - Include workflow support for non-ambulatory patients requiring special handling
 - Focus on reducing preventable wasted trips and communication overhead
+
+#tags: driver, clinic-no-visibility, wasted-trip, late-pickup, no-shared-timeline, no-backup, stress, no-coordination

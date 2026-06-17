@@ -70,3 +70,5 @@ Pilot priorities reinforced by this case:
 - Consider healthcare-worker referral pathway for identifying patients at transport risk
 
 This case adds professional healthcare-system validation to earlier patient and driver perspectives.
+
+#tags: rn, no-gas, rideshare-unaffordable, family-unreliable, public-transit-gap, missed-appointment, delayed-care, stress, no-coordination

@@ -18,6 +18,23 @@ This lightweight pre-pack helps you capture outreach conversations consistently 
 3. Fill in one short section in `synthesis-template.md` (date + key takeaways).
 4. At 10 interviews, use the tracker and synthesis notes to generate your submission pack.
 
+## Knowledge Base Structure
+
+This folder is the primary source of truth for:
+
+- Product decisions
+- Risk logic
+- Pilot design
+- Pitch narrative
+- Future AI-assisted design
+
+### Structure
+
+- `case-studies/` - Individual conversations and case studies.
+- `patterns.md` - Cross-case patterns (problems, impacts, behaviors).
+- `validation-to-feature-mapping.md` - How validation informs product features and roadmap.
+- `README.md` - Overview and usage guide for the validation knowledge base.
+
 ## Minimum Coverage Goal (Before Submission Pack)
 
 - At least 10 completed interviews

@@ -60,3 +60,5 @@ Justification:
 - Prioritize reliability alerts and backup coordination workflows
 - Reduce friction for critical recurring care pathways (for example, dialysis)
 - Add early intervention features when transportation risk is detected
+
+#tags: patient, dialysis, no-backup, missed-appointment, delayed-care, hospitalization-risk, stress

@@ -70,3 +70,5 @@ Pilot priorities reinforced by this case:
 - Design affordability-aware and fallback-friendly ride coordination features
 
 This case strengthens clinical evidence that transportation reliability and communication are core drivers of appointment adherence and outcomes.
+
+#tags: rn, chronic, elderly, no-car, no-gas, family-unreliable, medication-disruption, missed-appointment, delayed-care, stress, no-coordination
