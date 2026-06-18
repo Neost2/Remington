@@ -1,6 +1,6 @@
 # CarePath Rolling Synthesis Log
 
-## Through CP-005
+## Through CP-007
 
 ### What Repeated
 
@@ -8,6 +8,7 @@
 - Poor communication and visibility force patients and caregivers to call around for status.
 - Real-time ETA, delay, and cancelation visibility is consistently requested.
 - Financial barriers (gas, rideshare cost, insurance transportation) are a repeating root cause.
+- Accessibility-constrained transport capacity is a recurring reliability gap for high-need households.
 
 ### What Was New
 
@@ -18,6 +19,8 @@
 - High-acuity disruption: participant reported missing a heart appointment and surgery timing due to transportation cancelation.
 - Repeat instability: participant explicitly said the failure happened again, confirming recurrence.
 - Agency need: participant wants ability to choose a more dependable provider path where possible.
+- Accessibility-specific transport matching (wheelchair-accessible vehicles) emerged as a core requirement.
+- Night-before no-provider notification surfaced as a severe failure mode with no recovery time.
 
 ### Priority Shifts
 
@@ -27,8 +30,8 @@
 
 ### Current Evidence Snapshot
 
-- Interviews logged: 5
-- Signal distribution: 5 Strong, 0 Medium, 0 Weak
+- Interviews logged: 7
+- Signal distribution: 6 Strong, 0 Medium, 1 Weak
 - Strongest recurring theme: reliability and communication breakdowns across transportation workflows
 
 ### Next Interview Targets
