@@ -11,61 +11,74 @@
 
 ## 2. Context of the Conversation
 
-- Method: Facebook outreach comment thread
-- Selection rationale: Real-world caregiver account from public outreach response
-- Prompt context: Discussion about transportation barriers for medical appointments
+- Method: Facebook Messenger conversation (multi-message follow-up)
+- Selection rationale: Real-world caregiver account with repeated, concrete transportation failures
+- Prompt context: Standard stakeholder interview questions focused on transportation-to-care barriers
 
 ## 3. Problem Identified (User Voice)
 
-Direct quote from participant:
+Direct quotes from participant:
 
-- "I use Medicaid transportation with my daughters. My daughter can only be transported with a wheelchair accessible van. We have been denied that several times because of the time etc. There have been several times she's had Little Rock appointments and they always call the night before and say they don't have a provider to take us. She NEEDS these appointments and we have no other way to get there"
+- "The biggest challenge Verida has is they prioritize getting kids/young adults with disabilities to places like Yvonne Richardson Center etc for day sitting, work instead of getting people to medical appointments."
+- "They need more wheelchair accessible vans and more drivers."
+- "When transportation falls through we have to cancel because we have no other way to get there."
+- "Not being able to ever get to Little Rock because they don't have a wheelchair accessible van is a big issue."
+- "The not having enough wheelchair vans, having to schedule 72 hours in advance..."
+- "I feel like there should be some kind of same day service to get people to appointments..."
+- "...we took ambulance to the hospital then had to pay for Uber to dentist."
+- "They use Uber and Lyft but that doesn't help me with my daughter in a wheelchair..."
 
 Core issues identified:
 
-- Accessibility-dependent rides are denied due to availability and timing constraints
-- Night-before notice of no provider leaves no recovery window
-- Family has no alternate transportation path for required appointments
+- Wheelchair-accessible capacity is insufficient for real demand (vans and drivers)
+- Scheduling rules (72-hour advance) conflict with real clinical scheduling and urgent-but-non-emergency needs
+- Night-before no-provider notices leave no recovery window
+- Existing alternatives (Uber/Lyft) fail for non-transferable wheelchair users
+- Long-distance specialty travel (Little Rock runs) is frequently blocked
 
 ## 4. Impact of the Problem
 
-- Logistical impact: Last-minute cancellation with no viable backup
-- Medical impact: Child risks missing required appointments
-- Emotional impact: High stress and urgency in caregiver language
-- Equity impact: Accessibility-dependent patients face amplified transportation vulnerability
+- Logistical impact: Last-minute cancellations and repeated inability to secure accessible transport for required appointments
+- Medical impact: Delayed or missed specialty/dental care; urgent cases can escalate to emergency pathways
+- Emotional impact: Ongoing caregiver stress, uncertainty, and burden from repeated transport failures
+- Financial impact: Out-of-pocket cost burden when backup requires paying for Uber after emergency transport
+- Equity impact: Accessibility-dependent families face structural transportation exclusion
 
 ## 5. Reaction to CarePath Concept
 
-- Participant did not explicitly score willingness to use in this thread
+- Participant explicitly agreed to continued engagement and follow-up
 - Response strongly validates need for reliability, accessibility matching, and early warning
+- Participant-described ideal state: more wheelchair vans, more drivers, and medical-appointment prioritization
 
 ## 6. Key Insights Extracted
 
-- Wheelchair-accessible capacity is a critical bottleneck
-- Night-before cancellations are a recurring failure mode with high care risk
-- Families with no backup options are highly vulnerable when provider assignment fails
-- Accessibility-specific transport matching should be treated as core, not edge-case functionality
+- Accessibility capacity and dispatch prioritization are not aligned with medical necessity
+- 72-hour scheduling requirements are incompatible with common care workflows (for example, surgery time notice patterns)
+- Generic rideshare integration does not solve needs for non-transferable wheelchair patients
+- Lack of same-day non-emergency options creates avoidable emergency utilization and extra costs
+- Burden concentration is clear: patient first, then parents/caregivers, then providers with lost visits
 
 ## 7. Validation Signal Strength
 
-- Strong
+- Strong (high-confidence evidence)
 
 Justification:
 
-- Clear, concrete, and repeated failure scenario
-- High-severity impact on required appointments for an accessibility-dependent patient
-- Multiple system gaps surfaced: capacity, notification timing, and backup absence
+- Multiple concrete, repeated failure scenarios described across scheduling, dispatch, accessibility, and fallback
+- High-severity impact on required appointments for an accessibility-dependent child
+- Clear downstream consequences documented across medical, logistical, emotional, and financial dimensions
 
 ## 8. How This Informs the Pilot
 
 Pilot priorities reinforced by this case:
 
-- Add accessibility requirement matching (for example, wheelchair-accessible van flags)
+- Add accessibility requirement matching (for example, wheelchair-accessible van flags plus non-transferable rider constraints)
 - Add earlier provider-capacity confirmation checkpoints before appointment day
-- Add backup escalation pathways when no provider is available
+- Add same-day urgent-non-emergency fallback pathways to avoid emergency-only escalation
+- Add backup escalation pathways when no provider is available, including long-distance specialty travel handling
 - Prioritize high-need pediatric and accessibility-dependent households in risk triage
 
-This case provides strong evidence that accessibility matching and proactive fallback workflows are essential for equitable transportation reliability.
+This case provides high-confidence evidence that accessibility matching, medical-priority dispatching, and proactive fallback workflows are essential for equitable transportation reliability.
 
 <!-- markdownlint-disable-next-line MD018 -->
-#tags: caregiver, medicaid-transportation, wheelchair-accessible, capacity-shortage, last-minute-cancelation, no-provider-available, no-backup, missed-appointment-risk, high-risk, equity-gap
+#tags: caregiver, medicaid-transportation, wheelchair-accessible, capacity-shortage, no-provider-available, no-backup, missed-appointment-risk, high-risk, equity-gap, verida, 72-hour-scheduling, same-day-gap, ambulance-to-uber, little-rock-specialty-travel

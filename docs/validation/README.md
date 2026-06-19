@@ -9,6 +9,7 @@ This lightweight pre-pack helps you capture outreach conversations consistently 
 - `synthesis-template.md`: Quick summary template to update after each interview.
 - `synthesis-log.md`: Running cross-interview synthesis notes.
 - `ai-builder-handoff.md`: Re-entry checklist and input pack for AI Builder.
+- `standard-stakeholder-questions.md`: Standard 10-question interview set for every stakeholder conversation.
 - `case-studies/`: Structured case-study writeups by conversation.
 
 ## How To Use

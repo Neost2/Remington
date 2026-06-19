@@ -10,7 +10,7 @@ A compact, mobile-friendly snapshot of the current validation interviews.
 | #4 | Katina | RN at Arkansas Baptist Hospital | Family, gas, and transit barriers | Missed appointments and fragmented care | Strong | rn, no-gas, family-unreliable, public-transit-gap, delayed-care |
 | #5 | Elijah | RN, BSN | Repeated transportation barriers across care settings | Delayed treatment, missed follow-up, medication disruption | Strong | rn, chronic, medication-disruption, delayed-care, no-coordination |
 | #6 | Monica | CNA / home health caregiver | Limited/unreliable resources | Missed appointments possible, no crisis reported | Weak | caregiver, cna, home-health, unreliable-resources, no-coordination |
-| #7 | Michelle | Parent caregiver (Medicaid transport) | Wheelchair-accessible van denials and night-before no-provider calls | Required appointments at risk with no backup transportation | Strong | caregiver, medicaid-transportation, wheelchair-accessible, no-provider-available, no-backup |
+| #7 | Michelle | Parent caregiver (Medicaid transport) | Wheelchair van shortages, 72-hour scheduling conflict, and night-before no-provider calls | Missed specialty care risk, emergency escalation, and out-of-pocket fallback costs | Strong | caregiver, medicaid-transportation, wheelchair-accessible, no-provider-available, no-backup, 72-hour-scheduling, same-day-gap, ambulance-to-uber |
 
 ## How To Use This Table
 
