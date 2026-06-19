@@ -1,0 +1,8 @@
+{
+    "chat.tools.terminal.autoApprove": {
+        "/^git -C \"c:\\\\Users\\\\Admin\\\\CarePath\\\\CarePath\" add docs/validation/README\\.md docs/validation/standard-stakeholder-questions\\.md docs/validation/case-studies/case-study-007-michelle-medicaid-wheelchair\\.md docs/validation/case-study-summary\\.md docs/validation/conversation-tracker\\.csv; git -C \"c:\\\\Users\\\\Admin\\\\CarePath\\\\CarePath\" commit -m \"docs\\(validation\\): standardize interview questions and strengthen Michelle evidence\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        }
+    }
+}
