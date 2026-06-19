@@ -1,9 +1,17 @@
 @import "tailwindcss";
 
 :root {
-  --brand-teal: #0d9488;
-  --brand-teal-dark: #0f766e;
-  --brand-teal-light: #ccfbf1;
+  /* CarePath brand palette — derived from logo */
+  --brand-purple:      #5540a1;
+  --brand-purple-dark: #3d2f7a;
+  --brand-purple-light:#ede9f7;
+  --brand-blue:        #0c6bc2;
+  --brand-blue-dark:   #094f91;
+  --brand-blue-light:  #dbeafe;
+  --brand-teal:        #1b9c86;
+  --brand-teal-dark:   #136e5e;
+  --brand-teal-light:  #d0f4ee;
+  --brand-navy:        #052b56;
 }
 
 body {
@@ -11,10 +19,8 @@ body {
   @apply bg-slate-50 text-slate-900 antialiased;
 }
 
-/* Smooth scrolling */
 html { scroll-behavior: smooth; }
 
-/* Custom scrollbar */
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { @apply bg-slate-100; }
 ::-webkit-scrollbar-thumb { @apply bg-slate-300 rounded-full; }

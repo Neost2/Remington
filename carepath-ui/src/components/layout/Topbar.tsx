@@ -25,7 +25,7 @@ export function Topbar({ title, subtitle, onMenuClick }: TopbarProps) {
       </div>
       <button className="relative p-2 rounded-xl hover:bg-slate-100 transition-colors text-slate-500">
         <Bell size={20} />
-        <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-teal-500 rounded-full" />
+        <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-[#1b9c86] rounded-full" />
       </button>
     </header>
   )

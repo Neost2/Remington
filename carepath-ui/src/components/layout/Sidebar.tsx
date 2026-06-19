@@ -2,6 +2,7 @@
 
 import { clsx } from 'clsx'
 import Link from 'next/link'
+import Image from 'next/image'
 import { usePathname } from 'next/navigation'
 import {
   LayoutDashboard, Calendar, Car, Users, CreditCard,
@@ -61,10 +62,14 @@ export function Sidebar({ role, userName = 'User' }: SidebarProps) {
     <aside className="flex flex-col w-64 min-h-screen bg-white border-r border-slate-100 shadow-sm">
       {/* Logo */}
       <div className="px-6 py-5 border-b border-slate-100">
-        <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 bg-teal-600 rounded-lg flex items-center justify-center">
-            <Heart size={16} className="text-white" />
-          </div>
+        <div className="flex items-center gap-3">
+          <Image
+            src="/carepath-logo.png"
+            alt="CarePath"
+            width={36}
+            height={36}
+            className="rounded-lg object-contain"
+          />
           <div>
             <p className="font-bold text-slate-900 text-sm leading-none">CarePath</p>
             <p className="text-xs text-slate-400 mt-0.5">{roleLabels[role]}</p>
@@ -83,11 +88,11 @@ export function Sidebar({ role, userName = 'User' }: SidebarProps) {
               className={clsx(
                 'flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-150',
                 active
-                  ? 'bg-teal-50 text-teal-700'
+                  ? 'bg-[#ede9f7] text-[#5540a1]'
                   : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900'
               )}
             >
-              <Icon size={18} className={active ? 'text-teal-600' : ''} />
+              <Icon size={18} className={active ? 'text-[#5540a1]' : ''} />
               {label}
             </Link>
           )
@@ -97,7 +102,7 @@ export function Sidebar({ role, userName = 'User' }: SidebarProps) {
       {/* User footer */}
       <div className="px-3 py-4 border-t border-slate-100">
         <div className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-50 cursor-pointer transition-colors">
-          <div className="w-8 h-8 rounded-full bg-teal-100 flex items-center justify-center text-teal-700 font-semibold text-sm">
+          <div className="w-8 h-8 rounded-full bg-[#ede9f7] flex items-center justify-center text-[#5540a1] font-semibold text-sm">
             {userName.charAt(0).toUpperCase()}
           </div>
           <div className="flex-1 min-w-0">
