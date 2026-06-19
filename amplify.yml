@@ -1,0 +1,20 @@
+version: 1
+applications:
+  - frontend:
+      phases:
+        preBuild:
+          commands:
+            - cd carepath-ui
+            - npm ci
+        build:
+          commands:
+            - npm run build
+      artifacts:
+        baseDirectory: carepath-ui/.next
+        files:
+          - "**/*"
+      cache:
+        paths:
+          - carepath-ui/node_modules/**/*
+          - carepath-ui/.next/cache/**/*
+    appRoot: carepath-ui
