@@ -2,15 +2,12 @@ import { Response, NextFunction } from 'express';
 import prisma from '../config/database';
 import { AuthRequest } from '../middleware/auth';
 import { AppError } from '../middleware/errorHandler';
-import { RideStatus } from '@prisma/client';
+import { RideStatus, UrgencyLevel, AccessibilityRequirement } from '@prisma/client';
 
-const WHEELCHAIR_KEYWORDS = ['wheelchair', 'mobility', 'nontransferable', 'non-transferable'];
-
-const textHasKeyword = (value: string | null | undefined, keywords: string[]): boolean => {
-  if (!value) return false;
-  const lowered = value.toLowerCase();
-  return keywords.some((keyword) => lowered.includes(keyword));
-};
+const WHEELCHAIR_ACCESSIBILITY_REQUIREMENTS: AccessibilityRequirement[] = [
+  AccessibilityRequirement.WHEELCHAIR_ACCESSIBLE,
+  AccessibilityRequirement.NON_TRANSFERABLE_WHEELCHAIR,
+];
 
 const buildCandidateScore = (reliabilityScore: number, ridesCompleted: number, maxMilesOneWay: number, estimatedMiles: number): number => {
   const reliabilityWeight = reliabilityScore * 12;
@@ -26,9 +23,9 @@ export const createRideRequest = async (req: AuthRequest, res: Response, next: N
       appointmentType, clinicName, clinicCity, clinicState, appointmentDate,
       estimatedMiles, isRecurring, recurrenceNote, appointmentNotes,
       pickupAddress, pickupTime, creditId,
-      mobilityNeeds, isWheelchairRequired, isNonTransferable,
-      requestedAdvanceWindowHours, urgencyLevel,
+      urgencyLevel,
       needsSameDayFallback, allowsCommunityVolunteer,
+      requestedAdvanceWindowHours,
     } = req.body;
 
     const patient = await prisma.patient.findUnique({ where: { userId: req.user!.userId } });
@@ -40,17 +37,15 @@ export const createRideRequest = async (req: AuthRequest, res: Response, next: N
     });
 
     const intakeNotes: string[] = [];
-    if (mobilityNeeds) intakeNotes.push(`mobility_needs: ${String(mobilityNeeds)}`);
-    if (typeof isWheelchairRequired === 'boolean') intakeNotes.push(`wheelchair_required: ${isWheelchairRequired ? 'yes' : 'no'}`);
-    if (typeof isNonTransferable === 'boolean') intakeNotes.push(`non_transferable: ${isNonTransferable ? 'yes' : 'no'}`);
-    if (typeof requestedAdvanceWindowHours === 'number') intakeNotes.push(`advance_window_hours: ${requestedAdvanceWindowHours}`);
-    if (urgencyLevel) intakeNotes.push(`urgency_level: ${String(urgencyLevel)}`);
-    if (typeof needsSameDayFallback === 'boolean') intakeNotes.push(`same_day_fallback_needed: ${needsSameDayFallback ? 'yes' : 'no'}`);
     if (typeof allowsCommunityVolunteer === 'boolean') intakeNotes.push(`community_volunteer_opt_in: ${allowsCommunityVolunteer ? 'yes' : 'no'}`);
 
     const compiledNotes = [appointmentNotes, intakeNotes.length ? `[intake] ${intakeNotes.join('; ')}` : null]
       .filter(Boolean)
       .join(' | ');
+
+    const resolvedUrgency: UrgencyLevel = Object.values(UrgencyLevel).includes(urgencyLevel)
+      ? urgencyLevel as UrgencyLevel
+      : UrgencyLevel.NORMAL;
 
     const appointment = await prisma.appointment.create({
       data: {
@@ -75,6 +70,9 @@ export const createRideRequest = async (req: AuthRequest, res: Response, next: N
         pickupTime: new Date(pickupTime),
         creditId: creditId ?? null,
         status: RideStatus.PENDING,
+        urgencyLevel: resolvedUrgency,
+        needsSameDayFallback: needsSameDayFallback ?? false,
+        requestedAdvanceWindowHours: requestedAdvanceWindowHours ?? null,
       },
       include: { appointment: true, coordinator: { include: { user: { select: { firstName: true, lastName: true, phone: true } } } } },
     });
@@ -169,19 +167,25 @@ export const getPoolingOptions = async (req: AuthRequest, res: Response, next: N
     });
     if (!ride) return next(new AppError('Ride not found for this coordinator', 404));
 
-    const needsWheelchairAccessible =
-      textHasKeyword(ride.patient.disability, WHEELCHAIR_KEYWORDS) ||
-      textHasKeyword(ride.patient.barriers, WHEELCHAIR_KEYWORDS) ||
-      textHasKeyword(ride.patient.notes, WHEELCHAIR_KEYWORDS);
+    // Derive wheelchair constraint from structured patient field
+    const needsWheelchairAccessible = WHEELCHAIR_ACCESSIBILITY_REQUIREMENTS.includes(
+      ride.patient.accessibilityRequirement,
+    );
 
     const hoursUntilPickup = (new Date(ride.pickupTime).getTime() - Date.now()) / (1000 * 60 * 60);
-    const urgencyLevel = hoursUntilPickup <= 12 ? 'critical' : hoursUntilPickup <= 24 ? 'high' : 'normal';
+    const urgencyLevel = ride.urgencyLevel === UrgencyLevel.CRITICAL ? 'critical'
+      : ride.urgencyLevel === UrgencyLevel.HIGH ? 'high'
+      : hoursUntilPickup <= 12 ? 'critical'
+      : hoursUntilPickup <= 24 ? 'high'
+      : 'normal';
 
     const drivers = await prisma.driver.findMany({
       where: {
         county: ride.patient.county,
         state: ride.patient.state,
         isAvailableNow: true,
+        // enforce wheelchair-accessible vehicle matching as a hard constraint
+        ...(needsWheelchairAccessible ? { isWheelchairAccessible: true } : {}),
       },
       include: { user: { select: { firstName: true, lastName: true, phone: true } } },
     });

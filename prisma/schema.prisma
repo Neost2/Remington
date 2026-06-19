@@ -13,6 +13,27 @@ enum Role {
   COORDINATOR
   ADMIN
   PARTNER
+  ADVOCATE
+}
+
+enum AccessibilityRequirement {
+  STANDARD
+  WHEELCHAIR_ACCESSIBLE
+  NON_TRANSFERABLE_WHEELCHAIR
+  STRETCHER
+}
+
+enum SchedulingConstraint {
+  STANDARD
+  SAME_DAY
+  ADVANCE_48H
+  ADVANCE_72H
+}
+
+enum UrgencyLevel {
+  NORMAL
+  HIGH
+  CRITICAL
 }
 
 enum RideStatus {
@@ -60,6 +81,7 @@ model User {
   driver      Driver?
   coordinator Coordinator?
   partner     InstitutionalPartner?
+  advocate    Advocate?
 
   @@map("users")
 }
@@ -77,13 +99,17 @@ model Patient {
   prefersSms      Boolean @default(true)
   prefersVoice    Boolean @default(false)
   primaryLanguage String  @default("English")
-  notes           String? // coordinator-visible notes (no diagnosis stored here)
+  notes                    String?  // coordinator-visible notes (no diagnosis stored here)
+
+  // Structured accessibility and scheduling constraints
+  accessibilityRequirement AccessibilityRequirement @default(STANDARD)
+  schedulingConstraint     SchedulingConstraint     @default(STANDARD)
 
   // Equity & Demographics
   raceEthnicity   String?
-  disability      String?
+  disability      String?  // free-text supplement to accessibilityRequirement
   incomeBracket   String?
-  barriers        String? // JSON array or comma-separated: ["language","mobility","tech"]
+  barriers        String?  // JSON array or comma-separated: ["language","mobility","tech"]
 
   appointments RideRequest[]
 
@@ -101,10 +127,11 @@ model Driver {
   user             User    @relation(fields: [userId], references: [id], onDelete: Cascade)
   county           String
   state            String
-  vehicleCapacity  Int     @default(4)
-  isInFallbackPool Boolean @default(false) // rapid-response roster
-  isAvailableNow   Boolean @default(false)
-  maxMilesOneWay   Int     @default(50)
+  vehicleCapacity          Int     @default(4)
+  isInFallbackPool         Boolean @default(false) // rapid-response roster
+  isAvailableNow           Boolean @default(false)
+  maxMilesOneWay           Int     @default(50)
+  isWheelchairAccessible   Boolean @default(false)
   preferredDays    String? // JSON array of days e.g. ["MON","WED","FRI"]
   communityNotes   String? // why they volunteer — visible to coordinators
   ridesCompleted   Int     @default(0)
@@ -113,6 +140,7 @@ model Driver {
   rides          RideRequest[]
   depotRoutes    DepotRouteDriver[]
   notifications  Notification[]
+  advocateRides  AdvocateRideRequest[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -135,6 +163,7 @@ model Coordinator {
   rideRequests  RideRequest[]
   depotRoutes   DepotRoute[]
   notifications Notification[]
+  advocateRides AdvocateRideRequest[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -153,7 +182,8 @@ model InstitutionalPartner {
   state        String
   isVerified   Boolean @default(false)
 
-  credits RideCredit[]
+  credits       RideCredit[]
+  advocateRides AdvocateRideRequest[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -176,9 +206,14 @@ model Appointment {
   notes           String?
 
   // Health Impact
-  wasMissed       Boolean?        @default(false)
-  missedReason    String?
-  impactNotes     String?
+  wasMissed            Boolean?  @default(false)
+  missedReason         String?
+  impactNotes          String?
+
+  // Rescheduling chain — links a rescheduled appointment back to the original
+  rescheduledFromId    String?
+  rescheduledFrom      Appointment?  @relation("ReschedulingChain", fields: [rescheduledFromId], references: [id])
+  rescheduledTo        Appointment[] @relation("ReschedulingChain")
 // ─── Ride Event Logging ──────────────────────────────────────────────────────
 
 model RideEvent {
@@ -262,15 +297,19 @@ model RideRequest {
   creditId      String?
   credit        RideCredit? @relation(fields: [creditId], references: [id])
 
-  status           RideStatus @default(PENDING)
-  pickupAddress    String
-  pickupTime       DateTime
-  confirmedAt      DateTime?
-  completedAt      DateTime?
-  cancelledAt      DateTime?
-  cancellationNote String?
-  isFallbackUsed   Boolean    @default(false)
-  patientNoShow    Boolean    @default(false)
+  status                   RideStatus           @default(PENDING)
+  urgencyLevel             UrgencyLevel         @default(NORMAL)
+  pickupAddress            String
+  pickupTime               DateTime
+  confirmedAt              DateTime?
+  completedAt              DateTime?
+  cancelledAt              DateTime?
+  cancellationNote         String?
+  isFallbackUsed           Boolean              @default(false)
+  patientNoShow            Boolean              @default(false)
+  needsSameDayFallback     Boolean              @default(false)
+  requestedAdvanceWindowHours Int?              // e.g. 72 for Medicaid scheduling windows
+  rescheduledFromRideId    String?              // links to prior ride if this is a reschedule
 
   notifications Notification[]
 
@@ -278,6 +317,48 @@ model RideRequest {
   updatedAt DateTime @updatedAt
 
   @@map("ride_requests")
+}
+
+// ─── Advocate ─────────────────────────────────────────────────────────────────
+// Represents veteran advocates, informal coordinators, and advocacy orgs
+// who arrange transportation on behalf of patients outside clinic referral paths.
+
+model Advocate {
+  id             String  @id @default(cuid())
+  userId         String  @unique
+  user           User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  organization   String? // e.g. "Veterans Transportation Alliance"
+  county         String
+  state          String
+  isVerified     Boolean @default(false)
+  specialization String? // e.g. "veteran", "dialysis", "pediatric"
+
+  advocateRides  AdvocateRideRequest[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("advocates")
+}
+
+// Joins an advocate to a ride they are coordinating on behalf of a patient
+model AdvocateRideRequest {
+  id            String      @id @default(cuid())
+  advocateId    String
+  advocate      Advocate    @relation(fields: [advocateId], references: [id])
+  rideRequestId String
+  rideRequest   RideRequest @relation(fields: [rideRequestId], references: [id])
+  driverId      String?
+  driver        Driver?     @relation(fields: [driverId], references: [id])
+  coordinatorId String?
+  coordinator   Coordinator? @relation(fields: [coordinatorId], references: [id])
+  partnerId     String?
+  partner       InstitutionalPartner? @relation(fields: [partnerId], references: [id])
+  notes         String?
+  createdAt     DateTime    @default(now())
+
+  @@unique([advocateId, rideRequestId])
+  @@map("advocate_ride_requests")
 }
 
 // ─── Depot Route (Scheduled Community Runs) ───────────────────────────────────

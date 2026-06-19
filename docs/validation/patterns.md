@@ -110,7 +110,61 @@
 
 ---
 
-## 5. Demand and willingness-to-adopt patterns
+## 5. Accessibility and vehicle matching
+
+### 5.1 Wheelchair-accessible vehicle enforcement
+
+- **Pattern:** Patients with non-transferable wheelchair needs are repeatedly matched to standard vehicles or denied service entirely because accessible capacity is insufficient or untracked.
+- **Seen in:** `case-study-007-michelle-medicaid-wheelchair.md`, `case-study-008-kevin-lee-veteran-advocate.md`
+- **Tags:** `wheelchair-accessible`, `vehicle-mismatch`, `non-transferable`, `capacity-shortage`, `accessibility-gap`
+- **Example quote(s):**
+- "They need more wheelchair accessible vans and more drivers."
+- "They use Uber and Lyft but that doesn't help me with my daughter in a wheelchair."
+- "Dispatchers sending incorrect vehicles" (Kevin Lee, CP-008)
+
+### 5.2 Scheduling advance-window constraints
+
+- **Pattern:** Medicaid and NEMT providers impose 72-hour advance scheduling rules that are incompatible with how medical appointments are actually scheduled, creating a gap for urgent-but-non-emergency needs.
+- **Seen in:** `case-study-007-michelle-medicaid-wheelchair.md`
+- **Tags:** `72-hour-scheduling`, `same-day-gap`, `medicaid-transportation`, `urgent-non-emergency`
+- **Example quote(s):**
+- "The not having enough wheelchair vans, having to schedule 72 hours in advance..."
+- "I feel like there should be some kind of same day service to get people to appointments."
+
+---
+
+## 6. Veteran and advocacy segment patterns
+
+### 6.1 Advocates acting as unofficial coordinators
+
+- **Pattern:** Veteran advocates and informal coordinators fill gaps the formal system leaves open, manually arranging rides for patients who fall outside standard clinic referral paths. No shared system supports this work.
+- **Seen in:** `case-study-008-kevin-lee-veteran-advocate.md`, `case-study-004-katina-rn.md`, `case-study-005-elijah-rn-bsn.md`
+- **Tags:** `veteran-advocate`, `unofficial-coordinator`, `no-unified-communication`, `manual-coordination`, `healthcare-transportation`
+- **Example quote(s):**
+- "Transportation should absolutely be part of the care process because patients cannot receive care if they cannot physically arrive."
+- "No centralized system connecting clinics, drivers, advocates, and patients."
+
+### 6.2 Compounded barriers for veteran population
+
+- **Pattern:** Veterans face a layered set of transportation barriers: distance from specialty care, mobility impairments, inconsistent VA-provided coverage, and no single coordination point.
+- **Seen in:** `case-study-008-kevin-lee-veteran-advocate.md`
+- **Tags:** `veteran`, `disability-access`, `distance-barrier`, `va-transportation`, `specialty-care`
+- **Example quote(s):**
+- "Veterans missing critical appointments."
+- "Advocates spending hours coordinating rides manually."
+
+---
+
+## 7. Market experimentation patterns
+
+### 7.1 Active workarounds without a complete solution
+
+- **Pattern:** Clinics and providers are actively experimenting (Uber Health, new tracking systems) but no tool unifies coordination, communication, and accessibility matching into one workflow.
+- **Seen in:** `case-study-008-kevin-lee-veteran-advocate.md`, `case-study-003-alyssa-heart-asthma.md`, `case-study-007-michelle-medicaid-wheelchair.md`
+- **Tags:** `uber-health-pilot`, `market-experimentation`, `no-comprehensive-solution`, `workaround`
+- **Example quote(s):**
+- "The facility has begun using Uber Health as a backup (pilot program at the VA in Jackson, MS)."
+- "The system is outdated. New systems require too many steps."
 
 ### 5.1 Explicit willingness to use CarePath
 
