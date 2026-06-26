@@ -63,6 +63,41 @@ enum CreditStatus {
   EXPIRED
 }
 
+// ─── Payment & Funding Enums ──────────────────────────────────────────────────
+
+enum FundingSource {
+  MEDICAID_NEMT
+  MEDICARE
+  PRIVATE_INSURANCE
+  CREDIT_CARD
+  GRANT
+  HSA_FSA
+  FAMILY
+  PARTNER_CREDIT
+  CHARITY
+  OTHER
+}
+
+enum PaymentStatus {
+  PENDING
+  AUTHORIZED
+  CAPTURED
+  REFUNDED
+  REALLOCATED
+  FAILED
+}
+
+enum TransportationProviderType {
+  NEMT_VAN
+  RIDESHARE
+  TAXI
+  VOLUNTEER_DRIVER
+  PUBLIC_TRANSIT
+  COMMUNITY_SHUTTLE
+  WHEELCHAIR_VAN
+  AMBULETTE
+}
+
 // ─── Core User ────────────────────────────────────────────────────────────────
 
 model User {
@@ -77,11 +112,12 @@ model User {
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
-  patient     Patient?
-  driver      Driver?
-  coordinator Coordinator?
-  partner     InstitutionalPartner?
-  advocate    Advocate?
+  patient           Patient?
+  driver            Driver?
+  coordinator       Coordinator?
+  partner           InstitutionalPartner?
+  advocate          Advocate?
+  communicationLogs CommunicationLog[]
 
   @@map("users")
 }
@@ -99,7 +135,7 @@ model Patient {
   prefersSms      Boolean @default(true)
   prefersVoice    Boolean @default(false)
   primaryLanguage String  @default("English")
-  notes                    String?  // coordinator-visible notes (no diagnosis stored here)
+  notes                    String?
 
   // Structured accessibility and scheduling constraints
   accessibilityRequirement AccessibilityRequirement @default(STANDARD)
@@ -107,11 +143,17 @@ model Patient {
 
   // Equity & Demographics
   raceEthnicity   String?
-  disability      String?  // free-text supplement to accessibilityRequirement
+  disability      String?
   incomeBracket   String?
-  barriers        String?  // JSON array or comma-separated: ["language","mobility","tech"]
+  barriers        String?
+
+  // Default funding source for payment routing
+  defaultFundingSource FundingSource? @default(MEDICAID_NEMT)
+  primaryInsuranceProvider String?
 
   appointments RideRequest[]
+  payments     PaymentAuthorization[]
+  surveys      SurveyResponse[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -128,19 +170,29 @@ model Driver {
   county           String
   state            String
   vehicleCapacity          Int     @default(4)
-  isInFallbackPool         Boolean @default(false) // rapid-response roster
+  isInFallbackPool         Boolean @default(false)
   isAvailableNow           Boolean @default(false)
   maxMilesOneWay           Int     @default(50)
   isWheelchairAccessible   Boolean @default(false)
-  preferredDays    String? // JSON array of days e.g. ["MON","WED","FRI"]
-  communityNotes   String? // why they volunteer — visible to coordinators
+  preferredDays    String?
+  communityNotes   String?
   ridesCompleted   Int     @default(0)
   reliabilityScore Float   @default(5.0)
+
+  // Provider type and payment acceptance
+  providerType     TransportationProviderType @default(VOLUNTEER_DRIVER)
+  acceptsCreditCard  Boolean @default(false)
+  acceptsMedicaid    Boolean @default(false)
+  acceptsGrantPay    Boolean @default(true)
+  perMileRateCents   Int?
+  baseFeeCents       Int?
 
   rides          RideRequest[]
   depotRoutes    DepotRouteDriver[]
   notifications  Notification[]
   advocateRides  AdvocateRideRequest[]
+  fallbackOptions FallbackOffer[]
+  surveys        SurveyResponse[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -156,7 +208,7 @@ model Coordinator {
   user        User    @relation(fields: [userId], references: [id], onDelete: Cascade)
   county      String
   state       String
-  organization String? // church, clinic, nonprofit, etc.
+  organization String?
   stipendActive Boolean @default(false)
   isVerified   Boolean @default(false)
 
@@ -164,6 +216,7 @@ model Coordinator {
   depotRoutes   DepotRoute[]
   notifications Notification[]
   advocateRides AdvocateRideRequest[]
+  surveys       SurveyResponse[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -202,7 +255,7 @@ model Appointment {
   appointmentDate DateTime
   estimatedMiles  Int
   isRecurring     Boolean         @default(false)
-  recurrenceNote  String?         // e.g. "every Tuesday"
+  recurrenceNote  String?
   notes           String?
 
   // Health Impact
@@ -210,21 +263,27 @@ model Appointment {
   missedReason         String?
   impactNotes          String?
 
-  // Rescheduling chain — links a rescheduled appointment back to the original
+  // Rescheduling chain
   rescheduledFromId    String?
   rescheduledFrom      Appointment?  @relation("ReschedulingChain", fields: [rescheduledFromId], references: [id])
   rescheduledTo        Appointment[] @relation("ReschedulingChain")
+
+  rideRequest RideRequest?
+
+  @@map("appointments")
+}
+
 // ─── Ride Event Logging ──────────────────────────────────────────────────────
 
 model RideEvent {
   id            String      @id @default(cuid())
   rideRequestId String
   rideRequest   RideRequest @relation(fields: [rideRequestId], references: [id])
-  eventType     String      // e.g. "STATUS_CHANGE", "FALLBACK_TRIGGERED", "NO_SHOW", "CANCELLED"
+  eventType     String
   oldStatus     RideStatus?
   newStatus     RideStatus?
   reason        String?
-  actorRole     Role?       // who triggered the event
+  actorRole     Role?
   actorId       String?
   createdAt     DateTime    @default(now())
 
@@ -243,8 +302,8 @@ model SurveyResponse {
   driver        Driver?     @relation(fields: [driverId], references: [id])
   coordinatorId String?
   coordinator   Coordinator? @relation(fields: [coordinatorId], references: [id])
-  npsScore      Int?        // 0-10
-  satisfaction  Int?        // 1-5
+  npsScore      Int?
+  satisfaction  Int?
   comments      String?
   submittedAt   DateTime    @default(now())
 
@@ -257,8 +316,8 @@ model RideCostLog {
   id            String      @id @default(cuid())
   rideRequestId String
   rideRequest   RideRequest @relation(fields: [rideRequestId], references: [id])
-  costCents     Int         // cost in cents
-  fundingSource String      // e.g. "GRANT", "MEDICAID", "PRIVATE", "FAMILY"
+  costCents     Int
+  fundingSource String
   estimatedSavingsCents Int?
   notes         String?
   createdAt     DateTime    @default(now())
@@ -272,11 +331,11 @@ model CommunicationLog {
   id            String      @id @default(cuid())
   userId        String?
   user          User?       @relation(fields: [userId], references: [id])
-  channel       String      // "sms", "voice", "email"
-  direction     String      // "sent", "received"
+  channel       String
+  direction     String
   message       String?
-  status        String?     // "delivered", "failed", "opt_out", "responded"
-  relatedId     String?     // e.g. rideRequestId, notificationId
+  status        String?
+  relatedId     String?
   createdAt     DateTime    @default(now())
 
   @@map("communication_logs")
@@ -308,10 +367,22 @@ model RideRequest {
   isFallbackUsed           Boolean              @default(false)
   patientNoShow            Boolean              @default(false)
   needsSameDayFallback     Boolean              @default(false)
-  requestedAdvanceWindowHours Int?              // e.g. 72 for Medicaid scheduling windows
-  rescheduledFromRideId    String?              // links to prior ride if this is a reschedule
+  requestedAdvanceWindowHours Int?
+  rescheduledFromRideId    String?
+
+  // ─── Payment & Provider Fields ────────────────────────────────────────────
+  fundingSource            FundingSource?
+  providerType             TransportationProviderType?
+  paymentAuthorizationId   String?
+  paymentAuthorization     PaymentAuthorization? @relation("RidePaymentAuthorization", fields: [paymentAuthorizationId], references: [id])
 
   notifications Notification[]
+  events        RideEvent[]
+  ridePayment   RidePayment? @relation("RidePaymentToRideRequest")
+  costLogs      RideCostLog[]
+  fallbackOffers FallbackOffer[]
+  surveys       SurveyResponse[]
+  advocateRides AdvocateRideRequest[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -319,19 +390,136 @@ model RideRequest {
   @@map("ride_requests")
 }
 
+// ─── Ride Payment (captures payment at ride level) ──────────────────────────
+
+model RidePayment {
+  id            String      @id @default(cuid())
+  rideRequestId String      @unique
+  rideRequest   RideRequest @relation("RidePaymentToRideRequest", fields: [rideRequestId], references: [id], onDelete: Cascade)
+
+  // Amount breakdown in cents
+  totalCents        Int
+  baseFeeCents      Int      @default(0)
+  mileageCents      Int      @default(0)
+  surchargeCents    Int      @default(0)
+  tipCents          Int      @default(0)
+
+  // Payment routing
+  fundingSource     FundingSource
+  paymentStatus     PaymentStatus @default(PENDING)
+  paidByPatient     Boolean       @default(false)
+  patientPortionCents Int         @default(0)
+
+  // Timestamps
+  authorizedAt  DateTime?
+  capturedAt    DateTime?
+  refundedAt    DateTime?
+  reallocatedAt DateTime?
+  notes         String?
+
+  transactions  PaymentTransaction[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("ride_payments")
+}
+
+// ─── Payment Transaction Trail ──────────────────────────────────────────────
+
+model PaymentTransaction {
+  id            String      @id @default(cuid())
+  ridePaymentId String
+  ridePayment   RidePayment @relation(fields: [ridePaymentId], references: [id], onDelete: Cascade)
+
+  transactionType String
+  amountCents     Int
+  currency        String     @default("USD")
+  status          PaymentStatus
+  gatewayReference String?
+  gatewayResponse String?
+  processedBy     String?
+  notes           String?
+
+  // For reallocations
+  reallocatedFromProviderType TransportationProviderType?
+  reallocatedToProviderType   TransportationProviderType?
+  reallocatedToDriverId       String?
+
+  createdAt DateTime @default(now())
+
+  @@map("payment_transactions")
+}
+
+// ─── Payment Authorization (pre-ride funding approval) ─────────────────────
+
+model PaymentAuthorization {
+  id            String      @id @default(cuid())
+  patientId     String
+  patient       Patient     @relation(fields: [patientId], references: [id])
+
+  fundingSource FundingSource
+  maxCents      Int
+  usedCents     Int         @default(0)
+  status        PaymentStatus @default(AUTHORIZED)
+
+  authorizationReference String?
+  authorizationCode      String?
+  expiresAt              DateTime?
+  notes                  String?
+
+  // Which rides were authorized under this
+  rides RideRequest[] @relation("RidePaymentAuthorization")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("payment_authorizations")
+}
+
+// ─── Fallback Offer (alternative transportation when primary fails) ─────────
+
+model FallbackOffer {
+  id            String      @id @default(cuid())
+  rideRequestId String
+  rideRequest   RideRequest @relation(fields: [rideRequestId], references: [id], onDelete: Cascade)
+  driverId      String?
+  driver        Driver?     @relation(fields: [driverId], references: [id])
+
+  providerType  TransportationProviderType
+  providerName  String
+  estimatedCostCents Int?
+  estimatedArrivalMinutes Int?
+  isAvailable          Boolean   @default(true)
+  isWheelchairAccessible Boolean @default(false)
+  acceptanceRate       Float?
+
+  // Selection tracking
+  wasOfferedToPatient Boolean   @default(false)
+  patientRespondedAt  DateTime?
+  wasAccepted         Boolean?
+  patientResponseNote String?
+
+  // Auto-match rank (lower = better)
+  autoMatchRank Int      @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("fallback_offers")
+}
+
 // ─── Advocate ─────────────────────────────────────────────────────────────────
-// Represents veteran advocates, informal coordinators, and advocacy orgs
-// who arrange transportation on behalf of patients outside clinic referral paths.
 
 model Advocate {
   id             String  @id @default(cuid())
   userId         String  @unique
   user           User    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  organization   String? // e.g. "Veterans Transportation Alliance"
+  organization   String?
   county         String
   state          String
   isVerified     Boolean @default(false)
-  specialization String? // e.g. "veteran", "dialysis", "pediatric"
+  specialization String?
 
   advocateRides  AdvocateRideRequest[]
 
@@ -367,7 +555,7 @@ model DepotRoute {
   id            String  @id @default(cuid())
   coordinatorId String
   coordinator   Coordinator @relation(fields: [coordinatorId], references: [id])
-  depotName     String  // "First Baptist Church parking lot"
+  depotName     String
   depotAddress  String
   county        String
   state         String
@@ -377,7 +565,7 @@ model DepotRoute {
   returnTime       DateTime?
   maxPassengers    Int       @default(6)
   isActive         Boolean   @default(true)
-  recurrenceNote   String?   // "Every Tuesday"
+  recurrenceNote   String?
 
   drivers DepotRouteDriver[]
 
@@ -431,8 +619,8 @@ model Notification {
   coordinatorId String?
   coordinator   Coordinator? @relation(fields: [coordinatorId], references: [id])
 
-  channel   String  // "sms" | "voice" | "email"
-  recipient String  // phone number or email
+  channel   String
+  recipient String
   message   String
   sentAt    DateTime?
   delivered Boolean  @default(false)

@@ -12,6 +12,8 @@ import rideEventRoutes from './routes/rideEvent.routes';
 import surveyResponseRoutes from './routes/surveyResponse.routes';
 import rideCostLogRoutes from './routes/rideCostLog.routes';
 import communicationLogRoutes from './routes/communicationLog.routes';
+import paymentRoutes from './routes/payment.routes';
+import fallbackRoutes from './routes/fallback.routes';
 
 const app = express();
 
@@ -35,6 +37,8 @@ app.use('/api/ride-events', rideEventRoutes);
 app.use('/api/survey-responses', surveyResponseRoutes);
 app.use('/api/ride-cost-logs', rideCostLogRoutes);
 app.use('/api/communication-logs', communicationLogRoutes);
+app.use('/api/payments', paymentRoutes);
+app.use('/api/fallback', fallbackRoutes);
 
 // 404 & error handling
 app.use(notFound);
