@@ -58,3 +58,25 @@
 - Dispatch coordinator with access to cancelation and delay data
 - Veteran patient who relies on VA or third-party transportation
 - Medicaid transportation broker or NEMT program manager
+
+## Addendum Through CP-014
+
+### New Signals Since CP-008
+
+- Cross-department operations burden is now explicit: transportation failures trigger repeated front-desk, lab, and insurance verification loops (CP-013).
+- Patient education and insurance transportation literacy emerged as a root-cause gap, not just an onboarding detail (CP-013).
+- Elderly patient advocate perspective confirms transportation reliability and communication are system-level barriers equal to clinical barriers for many patients (CP-014).
+- Stakeholder burden distribution is now fully triangulated: patient, family, clinic staff, and providers all incur measurable cost when rides fail (CP-014).
+- Vulnerable populations most exposed are repeatedly identified as seniors, people with disabilities, chronic illness populations, and rural or underserved communities (CP-014).
+
+### Updated Priority Emphasis
+
+- Product: Shared real-time transportation timeline remains core; now includes explicit clinic workflow recovery support (reschedule, status handoff, escalation).
+- Workflow: Build patient-facing education surfaces for insurance and third-party transportation expectations before appointment day.
+- Positioning: CarePath should frame transportation as an access-to-care reliability layer that reduces operational duplication for clinics and uncertainty for families.
+
+### Updated Evidence Snapshot
+
+- Interviews logged: 14
+- Signal distribution: 12 Strong, 1 Moderate, 1 Weak
+- Strongest recurring theme: communication and coordination fragmentation across existing transportation options
