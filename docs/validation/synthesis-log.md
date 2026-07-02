@@ -43,7 +43,7 @@
 ### Cross-Reference Map (Updated Through CP-008)
 
 | Theme | Participants |
-|---|---|
+| --- | --- |
 | Daily or recurring transport failures | CP-001, CP-002, CP-003, CP-007, CP-008 |
 | Communication breakdown (patient, driver, clinic) | CP-001, CP-003, CP-004, CP-008 |
 | Accessibility / vehicle-type mismatch | CP-007, CP-008 |
@@ -75,8 +75,22 @@
 - Workflow: Build patient-facing education surfaces for insurance and third-party transportation expectations before appointment day.
 - Positioning: CarePath should frame transportation as an access-to-care reliability layer that reduces operational duplication for clinics and uncertainty for families.
 
-### Updated Evidence Snapshot
+### Current Evidence Snapshot (Through CP-015)
 
 - Interviews logged: 14
 - Signal distribution: 12 Strong, 1 Moderate, 1 Weak
 - Strongest recurring theme: communication and coordination fragmentation across existing transportation options
+
+## Addendum Through CP-015
+
+### New Signal Since CP-014
+
+- Late-cancelation policy disputes in home care are not resolved by signed agreements alone; trust breaks when clients do not see operational context behind the fee (CP-015).
+- Workforce stability risk is explicit: same-day cancellations remove caregiver hours and increase agency rescheduling overhead (CP-015).
+- Transparency and pattern tracking emerged as prevention levers: recurring late-cancel behavior should trigger earlier communication and mitigation workflows (CP-015).
+
+### Updated Evidence Snapshot
+
+- Interviews logged: 15
+- Signal distribution: 13 Strong, 1 Moderate, 1 Weak
+- Strongest recurring theme: communication and coordination fragmentation across transportation and care-scheduling workflows
