@@ -80,5 +80,11 @@ Pilot priorities reinforced by this case:
 
 This case provides high-confidence evidence that accessibility matching, medical-priority dispatching, and proactive fallback workflows are essential for equitable transportation reliability.
 
+## 9. July 2026 Expansion Reference
+
+For the expanded addendum covering airport mobility barriers, continuance-of-care mobility requirements, and direct pilot-interest confirmation from Michelle, see:
+
+- `docs/validation/case-studies/michelle-bowen.md`
+
 <!-- markdownlint-disable-next-line MD018 -->
 #tags: caregiver, medicaid-transportation, wheelchair-accessible, capacity-shortage, no-provider-available, no-backup, missed-appointment-risk, high-risk, equity-gap, verida, 72-hour-scheduling, same-day-gap, ambulance-to-uber, little-rock-specialty-travel
