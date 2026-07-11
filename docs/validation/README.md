@@ -11,6 +11,13 @@ This lightweight pre-pack helps you capture outreach conversations consistently 
 - `ai-builder-handoff.md`: Re-entry checklist and input pack for AI Builder.
 - `standard-stakeholder-questions.md`: Standard 10-question interview set for every stakeholder conversation.
 - `case-studies/`: Structured case-study writeups by conversation.
+- `pilot-data-messaging-validation-playbook.md`: End-to-end setup, QA, formulas, and export SOP for pilot data and messaging validation.
+- `templates/`: Google Sheets starter templates in TSV format.
+  - `referral-level.tsv`
+  - `weekly-roll-up.tsv`
+  - `messaging-scorecard.tsv`
+  - `messaging-findings-summary.tsv`
+  - `quality-checks.tsv`
 
 ## How To Use
 
