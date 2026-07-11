@@ -1,8 +1,12 @@
 # CarePath
 
+![CarePath](./carepath-ui/public/carepath-logo.png)
+
 ## About
 
-CarePath is a transportation coordination tool that helps patients anywhere in the country arrange reliable rides to medical appointments, aiming to reduce no-shows and improve access to essential healthcare.
+CarePath is a transportation coordination tool that helps patients arrange reliable rides to medical appointments, aiming to reduce no-shows and improve access to essential healthcare.
+
+CarePath is designed to be location-agnostic and does not rely on mileage as a decision factor.
 
 The project is focused on removing transportation and communication failures that cause missed care. It is being shaped through early validation conversations with patients, caregivers, and transportation stakeholders.
 
@@ -23,6 +27,7 @@ npm run setup
 ```
 
 The setup script will:
+
 1. Check Node.js and npm versions
 2. Create `.env` from `.env.example`
 3. Prompt for your `DATABASE_URL`, `JWT_SECRET`, and optional Twilio credentials
@@ -54,9 +59,10 @@ npm run prisma:studio
 ```
 
 ---
+
 ## Validation Workspace (Early Discovery)
 
-This repository includes a lightweight validation pre-pack used to capture founder interviews and prepare evidence for investor and cohort updates across any geography.
+This repository includes a lightweight validation pre-pack used to capture founder interviews and prepare evidence for investor and cohort updates.
 
 ### Location
 

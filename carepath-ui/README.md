@@ -4,7 +4,9 @@
 
 ## About
 
-CarePath is a transportation coordination tool that helps patients anywhere in the country arrange reliable rides to medical appointments, aiming to reduce no-shows and improve access to essential healthcare.
+CarePath is a transportation coordination tool that helps patients arrange reliable rides to medical appointments, aiming to reduce no-shows and improve access to essential healthcare.
+
+CarePath is designed to be location-agnostic and does not rely on mileage as a decision factor.
 
 The project is focused on removing transportation and communication failures that cause missed care. It is being shaped through early validation conversations with patients, caregivers, and transportation stakeholders.
 
@@ -27,7 +29,7 @@ Open [http://localhost:3000](http://localhost:3000) to view the app.
 ## Role-based portals
 
 | Role | Path |
-|---|---|
+| --- | --- |
 | Patient | `/patient` |
 | Driver | `/driver` |
 | Coordinator | `/coordinator` |
