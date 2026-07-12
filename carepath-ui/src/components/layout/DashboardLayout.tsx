@@ -3,7 +3,6 @@
 import { useState } from 'react'
 import { Sidebar } from '@/components/layout/Sidebar'
 import { Topbar } from '@/components/layout/Topbar'
-import { clsx } from 'clsx'
 
 type Role = 'patient' | 'driver' | 'coordinator' | 'admin'
 
@@ -19,26 +18,29 @@ export function DashboardLayout({ children, role, title, subtitle, userName }: D
   const [sidebarOpen, setSidebarOpen] = useState(false)
 
   return (
-    <div className="flex min-h-screen bg-slate-50">
-      {/* Sidebar — hidden on mobile, visible on lg+ */}
-      <div className="hidden lg:flex">
+    <div style={{ display: 'flex', minHeight: '100vh', background: '#f8fafc' }}>
+      {/* Desktop sidebar */}
+      <div style={{ display: 'flex' }} className="cp-desktop-sidebar">
         <Sidebar role={role} userName={userName} />
       </div>
 
-      {/* Mobile sidebar overlay */}
+      {/* Mobile overlay */}
       {sidebarOpen && (
-        <div className="fixed inset-0 z-40 flex lg:hidden">
-          <div className="fixed inset-0 bg-black/40 backdrop-blur-sm" onClick={() => setSidebarOpen(false)} />
-          <div className="relative z-50">
+        <div style={{ position: 'fixed', inset: 0, zIndex: 40, display: 'flex' }}>
+          <div
+            style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.4)', backdropFilter: 'blur(4px)' }}
+            onClick={() => setSidebarOpen(false)}
+          />
+          <div style={{ position: 'relative', zIndex: 50 }}>
             <Sidebar role={role} userName={userName} />
           </div>
         </div>
       )}
 
-      {/* Main content */}
-      <div className="flex-1 flex flex-col min-w-0">
+      {/* Main */}
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0 }}>
         <Topbar title={title} subtitle={subtitle} onMenuClick={() => setSidebarOpen(true)} />
-        <main className="flex-1 p-6">
+        <main style={{ flex: 1, padding: 24 }}>
           {children}
         </main>
       </div>

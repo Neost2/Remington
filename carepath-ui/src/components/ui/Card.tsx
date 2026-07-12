@@ -1,29 +1,22 @@
-import { clsx } from 'clsx'
-
 interface CardProps {
   children: React.ReactNode
   className?: string
   hover?: boolean
+  style?: React.CSSProperties
 }
 
-export function Card({ children, className, hover = false }: CardProps) {
+export function Card({ children, className, hover, style }: CardProps) {
   return (
-    <div
-      className={clsx(
-        'bg-white rounded-2xl border border-slate-100 shadow-sm p-6',
-        hover && 'hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 cursor-pointer',
-        className
-      )}
-    >
+    <div className={`cp-card${hover ? ' cp-card-hover' : ''}${className ? ' ' + className : ''}`} style={style}>
       {children}
     </div>
   )
 }
 
-export function CardHeader({ children, className }: { children: React.ReactNode; className?: string }) {
-  return <div className={clsx('mb-4', className)}>{children}</div>
+export function CardHeader({ children, className, style }: { children: React.ReactNode; className?: string; style?: React.CSSProperties }) {
+  return <div style={{ marginBottom: 16, ...style }} className={className}>{children}</div>
 }
 
 export function CardTitle({ children, className }: { children: React.ReactNode; className?: string }) {
-  return <h3 className={clsx('text-lg font-semibold text-slate-900', className)}>{children}</h3>
+  return <h3 style={{ fontSize: 16, fontWeight: 700, color: '#0f172a' }} className={className}>{children}</h3>
 }

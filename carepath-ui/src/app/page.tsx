@@ -1,127 +1,247 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import { Ambulance, ArrowRight, Bus, Car, HandHeart, ShieldCheck, TimerReset } from 'lucide-react'
-
-const CAREPATH_LOGO_URL = 'https://raw.githubusercontent.com/Debalent/CarePath/main/carepath-ui/public/carepath-logo.png'
+import { ArrowRight, Bus, HandHeart, TimerReset, ShieldCheck, Car, Ambulance, CheckCircle } from 'lucide-react'
 
 const pillars = [
   {
     icon: Bus,
-    title: 'Pool Every Existing Network',
-    description: 'Bring Medicaid transport, clinic shuttles, and local providers into one dispatch decision layer.',
+    color: '#0c6bc2',
+    bg: '#dbeafe',
+    title: 'Pool Every Network',
+    description: 'Medicaid transport, clinic shuttles, and local providers unified in one dispatch layer.',
   },
   {
     icon: HandHeart,
-    title: 'Activate Community Volunteers',
-    description: 'Use vetted volunteers as fallback coverage before missed appointments become a care crisis.',
+    color: '#1b9c86',
+    bg: '#d0f4ee',
+    title: 'Activate Volunteers',
+    description: 'Vetted community volunteers as fallback coverage before missed appointments become a crisis.',
   },
   {
     icon: TimerReset,
-    title: 'Intervene Before Failure',
-    description: 'Surface risk signals early so teams can recover rides before the appointment window closes.',
+    color: '#5540a1',
+    bg: '#ede9f7',
+    title: 'Intervene Early',
+    description: 'Surface risk signals so teams can recover rides before the appointment window closes.',
   },
+]
+
+const stats = [
+  { value: '8', label: 'Validation interviews', color: '#5540a1' },
+  { value: '7', label: 'Strong signal cases', color: '#1b9c86' },
+  { value: '4+', label: 'Patient segments', color: '#0c6bc2' },
+  { value: '0', label: 'Dominant solutions', color: '#052b56' },
 ]
 
 export default function Home() {
   return (
-    <div className="min-h-screen text-slate-100" style={{ background: 'linear-gradient(135deg, #052b56 0%, #0c6bc2 45%, #5540a1 75%, #1b9c86 100%)' }}>
-      <main className="mx-auto flex w-full max-w-6xl flex-col gap-10 px-6 pb-12 pt-10 md:px-10">
+    <div style={{ minHeight: '100vh', background: '#f8fafc', fontFamily: 'Inter, -apple-system, sans-serif' }}>
+
+      {/* Nav */}
+      <nav style={{
+        position: 'sticky', top: 0, zIndex: 50,
+        background: 'rgba(255,255,255,0.9)', backdropFilter: 'blur(12px)',
+        borderBottom: '1px solid #e2e8f0',
+        padding: '0 32px', height: 64,
+        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          <Image src="/carepath-logo.png" alt="CarePath" width={36} height={36}
+            style={{ borderRadius: 8, objectFit: 'contain' }} />
+          <span style={{ fontWeight: 800, fontSize: 18, color: '#0f172a' }}>CarePath</span>
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+          <Link href="/coordinator/pooling" style={{
+            display: 'inline-flex', alignItems: 'center', gap: 6,
+            padding: '8px 18px', borderRadius: 10, fontSize: 14, fontWeight: 600,
+            background: '#5540a1', color: '#fff', textDecoration: 'none',
+            boxShadow: '0 2px 8px rgba(85,64,161,0.3)',
+          }}>
+            Coordinator Hub
+          </Link>
+          <Link href="/patient/intake" style={{
+            display: 'inline-flex', alignItems: 'center', gap: 6,
+            padding: '8px 18px', borderRadius: 10, fontSize: 14, fontWeight: 600,
+            background: '#1b9c86', color: '#fff', textDecoration: 'none',
+            boxShadow: '0 2px 8px rgba(27,156,134,0.3)',
+          }}>
+            Request a Ride
+          </Link>
+        </div>
+      </nav>
+
+      <main style={{ maxWidth: 1200, margin: '0 auto', padding: '0 24px 80px' }}>
 
         {/* Hero */}
-        <section className="relative overflow-hidden rounded-3xl border border-white/10 bg-white/8 p-8 shadow-2xl backdrop-blur-sm md:p-10">
-          <div className="absolute -left-16 -top-16 h-48 w-48 rounded-full blur-3xl" style={{ background: 'rgba(85,64,161,0.25)' }} />
-          <div className="absolute -bottom-20 right-6 h-56 w-56 rounded-full blur-3xl" style={{ background: 'rgba(27,156,134,0.25)' }} />
+        <section style={{
+          marginTop: 48,
+          borderRadius: 24,
+          background: 'linear-gradient(135deg, #052b56 0%, #0c6bc2 40%, #5540a1 70%, #1b9c86 100%)',
+          padding: '56px 48px',
+          position: 'relative',
+          overflow: 'hidden',
+          boxShadow: '0 20px 60px rgba(5,43,86,0.3)',
+        }}>
+          {/* Glow orbs */}
+          <div style={{ position: 'absolute', top: -60, left: -60, width: 240, height: 240, borderRadius: '50%', background: 'rgba(85,64,161,0.3)', filter: 'blur(60px)' }} />
+          <div style={{ position: 'absolute', bottom: -80, right: 40, width: 280, height: 280, borderRadius: '50%', background: 'rgba(27,156,134,0.25)', filter: 'blur(60px)' }} />
 
-          <div className="relative grid gap-8 md:grid-cols-[1.5fr_1fr] md:items-end">
+          <div style={{ position: 'relative', display: 'grid', gridTemplateColumns: '1.5fr 1fr', gap: 40, alignItems: 'center' }}>
             <div>
-              {/* Logo + wordmark */}
-              <div className="flex items-center gap-3 mb-5">
-                <Image
-                  src={CAREPATH_LOGO_URL}
-                  alt="CarePath"
-                  width={52}
-                  height={52}
-                  className="rounded-xl object-contain"
-                />
-                <span className="text-2xl font-bold tracking-tight text-white">CarePath</span>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 20 }}>
+                <Image src="/carepath-logo.png" alt="CarePath" width={56} height={56}
+                  style={{ borderRadius: 14, objectFit: 'contain', background: 'rgba(255,255,255,0.1)' }} />
+                <span style={{ fontSize: 28, fontWeight: 800, color: '#fff' }}>CarePath</span>
               </div>
-
-              <p className="text-xs font-semibold uppercase tracking-[0.22em]" style={{ color: '#a5d8ff' }}>
+              <p style={{ fontSize: 12, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.2em', color: '#93c5fd', marginBottom: 12 }}>
                 Transportation Coordination for Medical Care
               </p>
-              <h1 className="mt-3 max-w-3xl text-4xl font-semibold leading-tight text-white md:text-5xl">
-                Reliable rides to medical appointments, anywhere in the country.
+              <h1 style={{ fontSize: 44, fontWeight: 800, color: '#fff', lineHeight: 1.15, marginBottom: 16 }}>
+                Reliable rides to medical appointments, anywhere.
               </h1>
-              <p className="mt-4 max-w-2xl text-base leading-7 text-slate-200 md:text-lg">
-                CarePath helps patients arrange transportation to medical appointments — reducing no-shows and
-                removing the communication and coordination failures that cause missed care. We pool Medicaid
-                transport, community volunteers, and local providers into one coordination layer so wheelchair
-                needs, same-day urgency, and long-distance specialty appointments are never left behind.
+              <p style={{ fontSize: 17, color: 'rgba(255,255,255,0.85)', lineHeight: 1.7, marginBottom: 28, maxWidth: 520 }}>
+                CarePath removes the transportation and communication failures that cause missed care — pooling Medicaid transport, community volunteers, and local providers into one coordination layer.
               </p>
-
-              <div className="mt-7 flex flex-wrap gap-3">
-                <Link
-                  href="/coordinator/pooling"
-                  className="inline-flex items-center gap-2 rounded-xl px-5 py-3 text-sm font-semibold transition hover:opacity-90"
-                  style={{ background: '#1b9c86', color: '#ffffff' }}
-                >
+              <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+                <Link href="/coordinator/pooling" style={{
+                  display: 'inline-flex', alignItems: 'center', gap: 8,
+                  padding: '13px 24px', borderRadius: 12, fontSize: 15, fontWeight: 700,
+                  background: '#1b9c86', color: '#fff', textDecoration: 'none',
+                  boxShadow: '0 4px 16px rgba(27,156,134,0.4)',
+                }}>
                   Open Pooling Hub <ArrowRight size={16} />
                 </Link>
-                <a
-                  href="#validation"
-                  className="inline-flex items-center gap-2 rounded-xl border border-white/25 bg-white/10 px-5 py-3 text-sm font-semibold text-white transition hover:bg-white/15"
-                >
-                  View evidence signals
+                <a href="#validation" style={{
+                  display: 'inline-flex', alignItems: 'center', gap: 8,
+                  padding: '13px 24px', borderRadius: 12, fontSize: 15, fontWeight: 700,
+                  background: 'rgba(255,255,255,0.12)', color: '#fff', textDecoration: 'none',
+                  border: '1px solid rgba(255,255,255,0.25)',
+                }}>
+                  View evidence
                 </a>
               </div>
             </div>
 
-            <div className="rounded-2xl border border-white/15 p-5" style={{ background: 'rgba(5,43,86,0.45)' }}>
-              <p className="text-sm font-semibold" style={{ color: '#a5d8ff' }}>Current priority profile</p>
-              <h2 className="mt-2 text-xl font-semibold text-white">Wheelchair-dependent family routing</h2>
-              <ul className="mt-4 space-y-2 text-sm text-slate-200">
-                <li className="flex items-start gap-2">
-                  <Car size={14} className="mt-0.5" style={{ color: '#1b9c86' }} />
-                  Limited wheelchair van supply for specialty runs
-                </li>
-                <li className="flex items-start gap-2">
-                  <Ambulance size={14} className="mt-0.5" style={{ color: '#1b9c86' }} />
-                  Avoid ambulance-only fallback by escalating same-day backup
-                </li>
-                <li className="flex items-start gap-2">
-                  <ShieldCheck size={14} className="mt-0.5" style={{ color: '#1b9c86' }} />
-                  Prioritize medical visits over non-clinical scheduling conflict
-                </li>
-              </ul>
+            {/* Priority card */}
+            <div style={{
+              background: 'rgba(5,43,86,0.5)', borderRadius: 18,
+              border: '1px solid rgba(255,255,255,0.15)', padding: 24,
+              backdropFilter: 'blur(8px)',
+            }}>
+              <p style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.12em', color: '#93c5fd', marginBottom: 8 }}>
+                Current priority profile
+              </p>
+              <h2 style={{ fontSize: 18, fontWeight: 700, color: '#fff', marginBottom: 16 }}>
+                Wheelchair-dependent family routing
+              </h2>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                {[
+                  { icon: Car, text: 'Limited wheelchair van supply for specialty runs' },
+                  { icon: Ambulance, text: 'Avoid ambulance-only fallback with same-day backup' },
+                  { icon: ShieldCheck, text: 'Prioritize medical visits over non-clinical conflicts' },
+                ].map(({ icon: Icon, text }) => (
+                  <div key={text} style={{ display: 'flex', alignItems: 'flex-start', gap: 10 }}>
+                    <div style={{ padding: 6, borderRadius: 8, background: 'rgba(27,156,134,0.25)', flexShrink: 0 }}>
+                      <Icon size={14} style={{ color: '#6ee7d4' }} />
+                    </div>
+                    <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.8)', lineHeight: 1.5 }}>{text}</p>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </section>
 
+        {/* Stats */}
+        <section style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 16, marginTop: 32 }}>
+          {stats.map(({ value, label, color }) => (
+            <div key={label} style={{
+              background: '#fff', borderRadius: 16, border: '1px solid #e2e8f0',
+              boxShadow: '0 1px 3px rgba(0,0,0,0.06)', padding: '20px 24px',
+              borderTop: `3px solid ${color}`,
+            }}>
+              <p style={{ fontSize: 32, fontWeight: 800, color, lineHeight: 1 }}>{value}</p>
+              <p style={{ fontSize: 13, color: '#64748b', marginTop: 6, fontWeight: 500 }}>{label}</p>
+            </div>
+          ))}
+        </section>
+
         {/* Pillars */}
-        <section className="grid gap-4 md:grid-cols-3">
-          {pillars.map((pillar) => {
-            const Icon = pillar.icon
-            return (
-              <article key={pillar.title} className="rounded-2xl border border-white/10 p-5 shadow-lg" style={{ background: 'rgba(5,43,86,0.4)' }}>
-                <div className="inline-flex rounded-xl p-2" style={{ background: 'rgba(85,64,161,0.3)', color: '#c4b5fd' }}>
-                  <Icon size={18} />
-                </div>
-                <h3 className="mt-4 text-lg font-semibold text-white">{pillar.title}</h3>
-                <p className="mt-2 text-sm leading-6 text-slate-300">{pillar.description}</p>
-              </article>
-            )
-          })}
+        <section style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 20, marginTop: 32 }}>
+          {pillars.map(({ icon: Icon, color, bg, title, description }) => (
+            <div key={title} style={{
+              background: '#fff', borderRadius: 18, border: '1px solid #e2e8f0',
+              boxShadow: '0 1px 3px rgba(0,0,0,0.06)', padding: 24,
+            }}>
+              <div style={{ width: 44, height: 44, borderRadius: 12, background: bg, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 16 }}>
+                <Icon size={22} style={{ color }} />
+              </div>
+              <h3 style={{ fontSize: 16, fontWeight: 700, color: '#0f172a', marginBottom: 8 }}>{title}</h3>
+              <p style={{ fontSize: 14, color: '#64748b', lineHeight: 1.6 }}>{description}</p>
+            </div>
+          ))}
         </section>
 
         {/* Validation signals */}
-        <section id="validation" className="rounded-3xl border p-6 md:p-8" style={{ borderColor: 'rgba(27,156,134,0.3)', background: 'rgba(5,43,86,0.5)' }}>
-          <p className="text-xs font-semibold uppercase tracking-[0.2em]" style={{ color: '#6ee7d4' }}>
-            Validation-backed direction
-          </p>
-          <div className="mt-3 grid gap-4 text-sm text-slate-200 md:grid-cols-3">
-            <div className="rounded-xl border border-white/10 bg-white/5 p-4">Night-before no-provider calls repeatedly create no-recovery windows.</div>
-            <div className="rounded-xl border border-white/10 bg-white/5 p-4">Rigid 72-hour scheduling fails urgent but non-emergency medical events.</div>
-            <div className="rounded-xl border border-white/10 bg-white/5 p-4">Families absorb cost and stress when systems default to ambulance plus paid rideshare.</div>
+        <section id="validation" style={{
+          marginTop: 32, borderRadius: 20,
+          background: '#fff', border: '1px solid #e2e8f0',
+          boxShadow: '0 1px 3px rgba(0,0,0,0.06)', padding: 32,
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 20 }}>
+            <div style={{ width: 4, height: 24, borderRadius: 2, background: '#1b9c86' }} />
+            <p style={{ fontSize: 12, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.15em', color: '#1b9c86' }}>
+              Validation-backed direction — 8 interviews, 7 strong signals
+            </p>
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16 }}>
+            {[
+              'Night-before no-provider calls repeatedly create no-recovery windows for caregivers.',
+              'Rigid 72-hour scheduling rules fail urgent but non-emergency medical events.',
+              'Families absorb cost and stress when systems default to ambulance plus paid rideshare.',
+            ].map((text) => (
+              <div key={text} style={{
+                background: '#f8fafc', borderRadius: 12, padding: 16,
+                border: '1px solid #e2e8f0', display: 'flex', gap: 10,
+              }}>
+                <CheckCircle size={16} style={{ color: '#1b9c86', flexShrink: 0, marginTop: 2 }} />
+                <p style={{ fontSize: 14, color: '#475569', lineHeight: 1.6 }}>{text}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* CTA */}
+        <section style={{
+          marginTop: 32, borderRadius: 20, padding: '40px 48px',
+          background: 'linear-gradient(135deg, #5540a1, #0c6bc2)',
+          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+          boxShadow: '0 8px 32px rgba(85,64,161,0.25)',
+        }}>
+          <div>
+            <h2 style={{ fontSize: 24, fontWeight: 800, color: '#fff', marginBottom: 8 }}>
+              Ready to coordinate care transport?
+            </h2>
+            <p style={{ fontSize: 15, color: 'rgba(255,255,255,0.8)' }}>
+              Open the pooling hub or submit a patient ride request.
+            </p>
+          </div>
+          <div style={{ display: 'flex', gap: 12, flexShrink: 0 }}>
+            <Link href="/coordinator/pooling" style={{
+              display: 'inline-flex', alignItems: 'center', gap: 8,
+              padding: '12px 22px', borderRadius: 12, fontSize: 14, fontWeight: 700,
+              background: '#fff', color: '#5540a1', textDecoration: 'none',
+            }}>
+              Coordinator Hub <ArrowRight size={15} />
+            </Link>
+            <Link href="/patient/intake" style={{
+              display: 'inline-flex', alignItems: 'center', gap: 8,
+              padding: '12px 22px', borderRadius: 12, fontSize: 14, fontWeight: 700,
+              background: 'rgba(255,255,255,0.15)', color: '#fff', textDecoration: 'none',
+              border: '1px solid rgba(255,255,255,0.3)',
+            }}>
+              Patient Intake
+            </Link>
           </div>
         </section>
       </main>

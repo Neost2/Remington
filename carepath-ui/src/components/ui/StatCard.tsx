@@ -1,4 +1,3 @@
-import { clsx } from 'clsx'
 import { LucideIcon } from 'lucide-react'
 
 interface StatCardProps {
@@ -6,27 +5,29 @@ interface StatCardProps {
   value: string | number
   icon: LucideIcon
   trend?: { value: string; positive: boolean }
-  color?: 'teal' | 'blue' | 'amber' | 'rose'
+  color?: 'teal' | 'blue' | 'amber' | 'rose' | 'purple'
 }
 
-const colorMap = {
-  teal: 'bg-teal-50 text-teal-600',
-  blue: 'bg-blue-50 text-blue-600',
-  amber: 'bg-amber-50 text-amber-600',
-  rose: 'bg-rose-50 text-rose-600',
+const colorMap: Record<string, { bg: string; color: string }> = {
+  teal:   { bg: '#d0f4ee', color: '#136e5e' },
+  blue:   { bg: '#dbeafe', color: '#1d4ed8' },
+  amber:  { bg: '#fef3c7', color: '#d97706' },
+  rose:   { bg: '#ffe4e6', color: '#e11d48' },
+  purple: { bg: '#ede9f7', color: '#5540a1' },
 }
 
 export function StatCard({ label, value, icon: Icon, trend, color = 'teal' }: StatCardProps) {
+  const { bg, color: iconColor } = colorMap[color]
   return (
-    <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-6 flex items-start gap-4">
-      <div className={clsx('p-3 rounded-xl', colorMap[color])}>
+    <div className="cp-stat">
+      <div className="cp-stat-icon" style={{ background: bg, color: iconColor }}>
         <Icon size={20} />
       </div>
-      <div className="flex-1 min-w-0">
-        <p className="text-sm text-slate-500 font-medium">{label}</p>
-        <p className="text-2xl font-bold text-slate-900 mt-0.5">{value}</p>
+      <div style={{ flex: 1, minWidth: 0 }}>
+        <p className="cp-stat-label">{label}</p>
+        <p className="cp-stat-value">{value}</p>
         {trend && (
-          <p className={clsx('text-xs mt-1 font-medium', trend.positive ? 'text-emerald-600' : 'text-red-500')}>
+          <p style={{ fontSize: 12, marginTop: 4, fontWeight: 600, color: trend.positive ? '#059669' : '#dc2626' }}>
             {trend.positive ? '↑' : '↓'} {trend.value}
           </p>
         )}

@@ -1,6 +1,5 @@
 'use client'
 
-import { clsx } from 'clsx'
 import Link from 'next/link'
 import Image from 'next/image'
 import { usePathname } from 'next/navigation'
@@ -9,92 +8,95 @@ import {
   MessageSquare, BarChart3, LogOut, Heart, MapPin, Route
 } from 'lucide-react'
 
-const CAREPATH_LOGO_URL = 'https://raw.githubusercontent.com/Debalent/CarePath/main/carepath-ui/public/carepath-logo.png'
-
 type Role = 'patient' | 'driver' | 'coordinator' | 'admin'
 
 const navItems: Record<Role, { label: string; href: string; icon: React.ElementType }[]> = {
   patient: [
-    { label: 'Dashboard', href: '/patient', icon: LayoutDashboard },
-    { label: 'Request Ride', href: '/patient/intake', icon: Route },
-    { label: 'My Rides', href: '/patient/rides', icon: Car },
+    { label: 'Dashboard',    href: '/patient',         icon: LayoutDashboard },
+    { label: 'Request Ride', href: '/patient/intake',  icon: Route },
+    { label: 'My Rides',     href: '/patient/rides',   icon: Car },
     { label: 'Appointments', href: '/patient/appointments', icon: Calendar },
-    { label: 'Messages', href: '/patient/messages', icon: MessageSquare },
+    { label: 'Messages',     href: '/patient/messages', icon: MessageSquare },
   ],
   driver: [
-    { label: 'Dashboard', href: '/driver', icon: LayoutDashboard },
-    { label: 'My Rides', href: '/driver/rides', icon: Car },
-    { label: 'Depot Routes', href: '/driver/routes', icon: MapPin },
-    { label: 'Availability', href: '/driver/availability', icon: Calendar },
+    { label: 'Dashboard',   href: '/driver',              icon: LayoutDashboard },
+    { label: 'My Rides',    href: '/driver/rides',        icon: Car },
+    { label: 'Depot Routes',href: '/driver/routes',       icon: MapPin },
+    { label: 'Availability',href: '/driver/availability', icon: Calendar },
   ],
   coordinator: [
-    { label: 'Dashboard', href: '/coordinator', icon: LayoutDashboard },
-    { label: 'Pooling Hub', href: '/coordinator/pooling', icon: Route },
-    { label: 'Ride Requests', href: '/coordinator/rides', icon: Car },
-    { label: 'Patients', href: '/coordinator/patients', icon: Users },
-    { label: 'Drivers', href: '/coordinator/drivers', icon: Heart },
-    { label: 'Depot Routes', href: '/coordinator/routes', icon: MapPin },
-    { label: 'Messages', href: '/coordinator/messages', icon: MessageSquare },
+    { label: 'Dashboard',    href: '/coordinator',          icon: LayoutDashboard },
+    { label: 'Pooling Hub',  href: '/coordinator/pooling',  icon: Route },
+    { label: 'Ride Requests',href: '/coordinator/rides',    icon: Car },
+    { label: 'Patients',     href: '/coordinator/patients', icon: Users },
+    { label: 'Drivers',      href: '/coordinator/drivers',  icon: Heart },
+    { label: 'Depot Routes', href: '/coordinator/routes',   icon: MapPin },
+    { label: 'Messages',     href: '/coordinator/messages', icon: MessageSquare },
   ],
   admin: [
-    { label: 'Dashboard', href: '/admin', icon: LayoutDashboard },
-    { label: 'Credits', href: '/admin/credits', icon: CreditCard },
-    { label: 'Cost & ROI', href: '/admin/roi', icon: BarChart3 },
-    { label: 'Partners', href: '/admin/partners', icon: Users },
+    { label: 'Dashboard', href: '/admin',          icon: LayoutDashboard },
+    { label: 'Credits',   href: '/admin/credits',  icon: CreditCard },
+    { label: 'Cost & ROI',href: '/admin/roi',      icon: BarChart3 },
+    { label: 'Partners',  href: '/admin/partners', icon: Users },
   ],
 }
 
 const roleLabels: Record<Role, string> = {
-  patient: 'Patient Portal',
-  driver: 'Driver Portal',
+  patient:     'Patient Portal',
+  driver:      'Driver Portal',
   coordinator: 'Coordinator Portal',
-  admin: 'Partner Portal',
+  admin:       'Partner Portal',
 }
 
-interface SidebarProps {
-  role: Role
-  userName?: string
+const roleAccent: Record<Role, string> = {
+  patient:     '#1b9c86',
+  driver:      '#0c6bc2',
+  coordinator: '#5540a1',
+  admin:       '#052b56',
 }
+
+interface SidebarProps { role: Role; userName?: string }
 
 export function Sidebar({ role, userName = 'User' }: SidebarProps) {
   const pathname = usePathname()
   const items = navItems[role]
+  const accent = roleAccent[role]
 
   return (
-    <aside className="flex flex-col w-64 min-h-screen bg-white border-r border-slate-100 shadow-sm">
+    <aside className="cp-sidebar">
       {/* Logo */}
-      <div className="px-6 py-5 border-b border-slate-100">
-        <div className="flex items-center gap-3">
-          <Image
-            src={CAREPATH_LOGO_URL}
-            alt="CarePath"
-            width={36}
-            height={36}
-            className="rounded-lg object-contain"
-          />
+      <div style={{ padding: '20px 24px', borderBottom: '1px solid #e2e8f0' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+          <Image src="/carepath-logo.png" alt="CarePath" width={38} height={38}
+            style={{ borderRadius: 10, objectFit: 'contain' }} />
           <div>
-            <p className="font-bold text-slate-900 text-sm leading-none">CarePath</p>
-            <p className="text-xs text-slate-400 mt-0.5">{roleLabels[role]}</p>
+            <p style={{ fontWeight: 800, fontSize: 15, color: '#0f172a', lineHeight: 1 }}>CarePath</p>
+            <p style={{ fontSize: 11, color: '#94a3b8', marginTop: 3 }}>{roleLabels[role]}</p>
           </div>
         </div>
       </div>
 
+      {/* Role pill */}
+      <div style={{ padding: '12px 16px 4px' }}>
+        <span style={{
+          display: 'inline-block', padding: '4px 12px', borderRadius: 99,
+          fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em',
+          background: accent + '18', color: accent,
+        }}>
+          {role}
+        </span>
+      </div>
+
       {/* Nav */}
-      <nav className="flex-1 px-3 py-4 space-y-1">
+      <nav style={{ flex: 1, padding: '8px 12px', display: 'flex', flexDirection: 'column', gap: 2 }}>
         {items.map(({ label, href, icon: Icon }) => {
           const active = pathname === href
           return (
-            <Link
-              key={href}
-              href={href}
-              className={clsx(
-                'flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-150',
-                active
-                  ? 'bg-[#ede9f7] text-[#5540a1]'
-                  : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900'
-              )}
+            <Link key={href} href={href}
+              className={`cp-nav-item${active ? ' active' : ''}`}
+              style={active ? { background: accent + '15', color: accent } : {}}
             >
-              <Icon size={18} className={active ? 'text-[#5540a1]' : ''} />
+              <Icon size={17} style={active ? { color: accent } : {}} />
               {label}
             </Link>
           )
@@ -102,16 +104,28 @@ export function Sidebar({ role, userName = 'User' }: SidebarProps) {
       </nav>
 
       {/* User footer */}
-      <div className="px-3 py-4 border-t border-slate-100">
-        <div className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-50 cursor-pointer transition-colors">
-          <div className="w-8 h-8 rounded-full bg-[#ede9f7] flex items-center justify-center text-[#5540a1] font-semibold text-sm">
+      <div style={{ padding: '12px', borderTop: '1px solid #e2e8f0' }}>
+        <div style={{
+          display: 'flex', alignItems: 'center', gap: 10,
+          padding: '10px 12px', borderRadius: 10, cursor: 'pointer',
+          transition: 'background 0.15s',
+        }}
+          onMouseEnter={e => (e.currentTarget.style.background = '#f8fafc')}
+          onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
+        >
+          <div style={{
+            width: 34, height: 34, borderRadius: '50%', flexShrink: 0,
+            background: accent + '20', color: accent,
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            fontWeight: 700, fontSize: 14,
+          }}>
             {userName.charAt(0).toUpperCase()}
           </div>
-          <div className="flex-1 min-w-0">
-            <p className="text-sm font-medium text-slate-900 truncate">{userName}</p>
-            <p className="text-xs text-slate-400 capitalize">{role}</p>
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <p style={{ fontSize: 13, fontWeight: 600, color: '#0f172a', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{userName}</p>
+            <p style={{ fontSize: 11, color: '#94a3b8', textTransform: 'capitalize' }}>{role}</p>
           </div>
-          <LogOut size={16} className="text-slate-400 hover:text-red-500 transition-colors" />
+          <LogOut size={15} style={{ color: '#94a3b8', flexShrink: 0 }} />
         </div>
       </div>
     </aside>
