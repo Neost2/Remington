@@ -27,8 +27,8 @@ const pillars = [
 ]
 
 const stats = [
-  { value: '8', label: 'Validation interviews', color: '#5540a1' },
-  { value: '7', label: 'Strong signal cases', color: '#1b9c86' },
+  { value: '15', label: 'Validation interviews', color: '#5540a1' },
+  { value: '13', label: 'Strong signal cases', color: '#1b9c86' },
   { value: '4+', label: 'Patient segments', color: '#0c6bc2' },
   { value: '0', label: 'Dominant solutions', color: '#052b56' },
 ]
@@ -191,7 +191,7 @@ export default function Home() {
           <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 20 }}>
             <div style={{ width: 4, height: 24, borderRadius: 2, background: '#1b9c86' }} />
             <p style={{ fontSize: 12, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.15em', color: '#1b9c86' }}>
-              Validation-backed direction — 8 interviews, 7 strong signals
+              Validation-backed direction — 15 interviews, 13 strong signals
             </p>
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16 }}>

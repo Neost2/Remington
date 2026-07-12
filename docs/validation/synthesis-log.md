@@ -1,6 +1,6 @@
 # CarePath Rolling Synthesis Log
 
-## Through CP-008
+## Through CP-015
 
 ### What Repeated
 
@@ -40,18 +40,22 @@
 - Signal distribution: 7 Strong, 0 Medium, 1 Weak
 - Strongest recurring theme: reliability and communication breakdowns across transportation workflows
 
-### Cross-Reference Map (Updated Through CP-008)
+### Cross-Reference Map (Updated Through CP-015)
 
 | Theme | Participants |
 | --- | --- |
-| Daily or recurring transport failures | CP-001, CP-002, CP-003, CP-007, CP-008 |
-| Communication breakdown (patient, driver, clinic) | CP-001, CP-003, CP-004, CP-008 |
+| Daily or recurring transport failures | CP-001, CP-002, CP-003, CP-007, CP-008, CP-010, CP-011, CP-013, CP-014 |
+| Communication breakdown (patient, driver, clinic) | CP-001, CP-003, CP-004, CP-008, CP-012, CP-013, CP-014 |
 | Accessibility / vehicle-type mismatch | CP-007, CP-008 |
-| Staff or advocate burnout from manual coordination | CP-004, CP-005, CP-008 |
-| No unified communication channel | CP-001, CP-008 |
+| Staff or advocate burnout from manual coordination | CP-004, CP-005, CP-008, CP-009, CP-011, CP-013 |
+| No unified communication channel | CP-001, CP-008, CP-012, CP-014 |
 | Active workaround experimentation (Uber Health, rideshare) | CP-003, CP-007, CP-008 |
 | Veteran or high-need population with compounded barriers | CP-008 |
-| Family or informal coordinator acting as backup | CP-004, CP-005, CP-007, CP-008 |
+| Family or informal coordinator acting as backup | CP-004, CP-005, CP-007, CP-008, CP-014 |
+| Caregiver financial burden (mileage, income loss) | CP-010, CP-011, CP-015 |
+| Late-cancelation and scheduling disruption | CP-015 |
+| Cross-department operational duplication | CP-013 |
+| Patient education gap (insurance transport literacy) | CP-013, CP-014 |
 
 ### Next Interview Targets
 

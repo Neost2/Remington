@@ -83,6 +83,13 @@ This repository includes a lightweight validation pre-pack used to capture found
 6. Case Study #6: Monica (CNA / Home Health Caregiver)
 7. Case Study #7: Michelle (Parent Caregiver, Medicaid Wheelchair Transportation)
 8. Case Study #8: Kevin Lee (Healthcare Transportation Specialist and Veteran Advocate)
+9. Case Study #9: Jessica Pate (Healthcare Caregiver, Central Arkansas)
+10. Case Study #10: Marti Cain (Home Health Caregiver, Agency-Based)
+11. Case Study #11: Robin Hancock (Home Health Caregiver, Agency-Based)
+12. Case Study #12: Juven Mirafior (NEMT Business Development Representative)
+13. Case Study #13: Avery Brooks (Frontline Clinic Operations Staff)
+14. Case Study #14: Jade Harper (Elderly Patient Advocate)
+15. Case Study #15: Home Care Late-Cancelation Policy (Caregiver Workforce)
 
 ### How To Use
 
