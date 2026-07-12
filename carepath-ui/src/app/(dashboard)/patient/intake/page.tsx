@@ -1,7 +1,7 @@
 'use client'
 
 import { FormEvent, useMemo, useState } from 'react'
-import { AlertCircle, CheckCircle2, HandHeart, ShieldCheck, Stethoscope, TimerReset, Wheelchair } from 'lucide-react'
+import { Accessibility, AlertCircle, CheckCircle2, HandHeart, ShieldCheck, Stethoscope, TimerReset } from 'lucide-react'
 import { DashboardLayout } from '@/components/layout/DashboardLayout'
 import { Badge } from '@/components/ui/Badge'
 import { Button } from '@/components/ui/Button'
@@ -382,7 +382,7 @@ export default function PatientIntakePage() {
             <div className="space-y-3">
               <div className="rounded-xl border border-slate-200 bg-slate-50 p-3">
                 <p className="flex items-center gap-2 text-sm font-medium text-slate-800">
-                  <Wheelchair size={16} /> Accessibility profile
+                  <Accessibility size={16} /> Accessibility profile
                 </p>
                 <ul className="mt-2 space-y-1 text-sm text-slate-600">
                   {intakeSummary.map((item) => (
