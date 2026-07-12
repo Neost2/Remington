@@ -1,10 +1,49 @@
 'use client'
 
 import { useState } from 'react'
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
+import { LayoutDashboard, Car, Route, Users, Calendar, MessageSquare, MapPin, Heart, CreditCard, BarChart3 } from 'lucide-react'
 import { Sidebar } from '@/components/layout/Sidebar'
 import { Topbar } from '@/components/layout/Topbar'
 
 type Role = 'patient' | 'driver' | 'coordinator' | 'admin'
+
+const bottomNavItems: Record<Role, { label: string; href: string; icon: React.ElementType }[]> = {
+  patient: [
+    { label: 'Home',     href: '/patient',        icon: LayoutDashboard },
+    { label: 'Ride',     href: '/patient/intake',  icon: Route },
+    { label: 'My Rides', href: '/patient/rides',   icon: Car },
+    { label: 'Appts',    href: '/patient/appointments', icon: Calendar },
+    { label: 'Messages', href: '/patient/messages', icon: MessageSquare },
+  ],
+  driver: [
+    { label: 'Home',    href: '/driver',              icon: LayoutDashboard },
+    { label: 'Rides',   href: '/driver/rides',        icon: Car },
+    { label: 'Routes',  href: '/driver/routes',       icon: MapPin },
+    { label: 'Hours',   href: '/driver/availability', icon: Calendar },
+  ],
+  coordinator: [
+    { label: 'Home',    href: '/coordinator',         icon: LayoutDashboard },
+    { label: 'Pooling', href: '/coordinator/pooling', icon: Route },
+    { label: 'Rides',   href: '/coordinator/rides',   icon: Car },
+    { label: 'Patients',href: '/coordinator/patients',icon: Users },
+    { label: 'Messages',href: '/coordinator/messages',icon: MessageSquare },
+  ],
+  admin: [
+    { label: 'Home',    href: '/admin',          icon: LayoutDashboard },
+    { label: 'Credits', href: '/admin/credits',  icon: CreditCard },
+    { label: 'ROI',     href: '/admin/roi',      icon: BarChart3 },
+    { label: 'Partners',href: '/admin/partners', icon: Users },
+  ],
+}
+
+const roleAccent: Record<Role, string> = {
+  patient:     '#1b9c86',
+  driver:      '#0c6bc2',
+  coordinator: '#5540a1',
+  admin:       '#052b56',
+}
 
 interface DashboardLayoutProps {
   children: React.ReactNode
@@ -16,34 +55,50 @@ interface DashboardLayoutProps {
 
 export function DashboardLayout({ children, role, title, subtitle, userName }: DashboardLayoutProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false)
+  const pathname = usePathname()
+  const accent = roleAccent[role]
+  const tabs = bottomNavItems[role]
 
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', background: '#f8fafc' }}>
+    <div className="cp-shell">
       {/* Desktop sidebar */}
-      <div style={{ display: 'flex' }} className="cp-desktop-sidebar">
-        <Sidebar role={role} userName={userName} />
-      </div>
+      <Sidebar role={role} userName={userName} />
 
-      {/* Mobile overlay */}
+      {/* Mobile sidebar overlay */}
       {sidebarOpen && (
-        <div style={{ position: 'fixed', inset: 0, zIndex: 40, display: 'flex' }}>
-          <div
-            style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.4)', backdropFilter: 'blur(4px)' }}
-            onClick={() => setSidebarOpen(false)}
-          />
-          <div style={{ position: 'relative', zIndex: 50 }}>
+        <div className="cp-sidebar-overlay">
+          <div className="cp-sidebar-backdrop" onClick={() => setSidebarOpen(false)} />
+          <div className="cp-sidebar-drawer">
             <Sidebar role={role} userName={userName} />
           </div>
         </div>
       )}
 
       {/* Main */}
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0 }}>
+      <div className="cp-main">
         <Topbar title={title} subtitle={subtitle} onMenuClick={() => setSidebarOpen(true)} />
-        <main style={{ flex: 1, padding: 24 }}>
+        <main style={{ flex: 1, padding: '16px', paddingBottom: '8px' }}>
           {children}
         </main>
       </div>
+
+      {/* Mobile bottom tab nav */}
+      <nav className="cp-bottom-nav">
+        {tabs.map(({ label, href, icon: Icon }) => {
+          const active = pathname === href || (href !== `/${role}` && pathname.startsWith(href))
+          return (
+            <Link
+              key={href}
+              href={href}
+              className={`cp-bottom-nav-item${active ? ' active' : ''}`}
+              style={active ? { color: accent } : {}}
+            >
+              <Icon size={20} />
+              <span>{label}</span>
+            </Link>
+          )
+        })}
+      </nav>
     </div>
   )
 }

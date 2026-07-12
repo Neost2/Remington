@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import { ArrowRight, Bus, HandHeart, TimerReset, ShieldCheck, Car, Ambulance, CheckCircle } from 'lucide-react'
+import { ArrowRight, Bus, HandHeart, TimerReset, CheckCircle } from 'lucide-react'
 
 const pillars = [
   {
@@ -74,109 +74,79 @@ export default function Home() {
 
         {/* Hero */}
         <section style={{
-          marginTop: 48,
-          borderRadius: 24,
+          marginTop: 32,
+          borderRadius: 20,
           background: 'linear-gradient(135deg, #052b56 0%, #0c6bc2 40%, #5540a1 70%, #1b9c86 100%)',
-          padding: '56px 48px',
+          padding: '40px 24px',
           position: 'relative',
           overflow: 'hidden',
           boxShadow: '0 20px 60px rgba(5,43,86,0.3)',
         }}>
-          {/* Glow orbs */}
           <div style={{ position: 'absolute', top: -60, left: -60, width: 240, height: 240, borderRadius: '50%', background: 'rgba(85,64,161,0.3)', filter: 'blur(60px)' }} />
           <div style={{ position: 'absolute', bottom: -80, right: 40, width: 280, height: 280, borderRadius: '50%', background: 'rgba(27,156,134,0.25)', filter: 'blur(60px)' }} />
 
-          <div style={{ position: 'relative', display: 'grid', gridTemplateColumns: '1.5fr 1fr', gap: 40, alignItems: 'center' }}>
-            <div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 20 }}>
-                <Image src="/carepath-logo.png" alt="CarePath" width={56} height={56}
-                  style={{ borderRadius: 14, objectFit: 'contain', background: 'rgba(255,255,255,0.1)' }} />
-                <span style={{ fontSize: 28, fontWeight: 800, color: '#fff' }}>CarePath</span>
-              </div>
-              <p style={{ fontSize: 12, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.2em', color: '#93c5fd', marginBottom: 12 }}>
-                Transportation Coordination for Medical Care
-              </p>
-              <h1 style={{ fontSize: 44, fontWeight: 800, color: '#fff', lineHeight: 1.15, marginBottom: 16 }}>
-                Reliable rides to medical appointments, anywhere.
-              </h1>
-              <p style={{ fontSize: 17, color: 'rgba(255,255,255,0.85)', lineHeight: 1.7, marginBottom: 28, maxWidth: 520 }}>
-                CarePath removes the transportation and communication failures that cause missed care — pooling Medicaid transport, community volunteers, and local providers into one coordination layer.
-              </p>
-              <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
-                <Link href="/coordinator/pooling" style={{
-                  display: 'inline-flex', alignItems: 'center', gap: 8,
-                  padding: '13px 24px', borderRadius: 12, fontSize: 15, fontWeight: 700,
-                  background: '#1b9c86', color: '#fff', textDecoration: 'none',
-                  boxShadow: '0 4px 16px rgba(27,156,134,0.4)',
-                }}>
-                  Open Pooling Hub <ArrowRight size={16} />
-                </Link>
-                <a href="#validation" style={{
-                  display: 'inline-flex', alignItems: 'center', gap: 8,
-                  padding: '13px 24px', borderRadius: 12, fontSize: 15, fontWeight: 700,
-                  background: 'rgba(255,255,255,0.12)', color: '#fff', textDecoration: 'none',
-                  border: '1px solid rgba(255,255,255,0.25)',
-                }}>
-                  View evidence
-                </a>
-              </div>
+          <div style={{ position: 'relative' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 20 }}>
+              <Image src="/carepath-logo.png" alt="CarePath" width={48} height={48}
+                style={{ borderRadius: 12, objectFit: 'contain', background: 'rgba(255,255,255,0.1)' }} />
+              <span style={{ fontSize: 24, fontWeight: 800, color: '#fff' }}>CarePath</span>
             </div>
-
-            {/* Priority card */}
-            <div style={{
-              background: 'rgba(5,43,86,0.5)', borderRadius: 18,
-              border: '1px solid rgba(255,255,255,0.15)', padding: 24,
-              backdropFilter: 'blur(8px)',
-            }}>
-              <p style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.12em', color: '#93c5fd', marginBottom: 8 }}>
-                Current priority profile
-              </p>
-              <h2 style={{ fontSize: 18, fontWeight: 700, color: '#fff', marginBottom: 16 }}>
-                Wheelchair-dependent family routing
-              </h2>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-                {[
-                  { icon: Car, text: 'Limited wheelchair van supply for specialty runs' },
-                  { icon: Ambulance, text: 'Avoid ambulance-only fallback with same-day backup' },
-                  { icon: ShieldCheck, text: 'Prioritize medical visits over non-clinical conflicts' },
-                ].map(({ icon: Icon, text }) => (
-                  <div key={text} style={{ display: 'flex', alignItems: 'flex-start', gap: 10 }}>
-                    <div style={{ padding: 6, borderRadius: 8, background: 'rgba(27,156,134,0.25)', flexShrink: 0 }}>
-                      <Icon size={14} style={{ color: '#6ee7d4' }} />
-                    </div>
-                    <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.8)', lineHeight: 1.5 }}>{text}</p>
-                  </div>
-                ))}
-              </div>
+            <p style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.2em', color: '#93c5fd', marginBottom: 10 }}>
+              Transportation Coordination for Medical Care
+            </p>
+            <h1 style={{ fontSize: 32, fontWeight: 800, color: '#fff', lineHeight: 1.2, marginBottom: 14 }}>
+              Reliable rides to medical appointments, anywhere.
+            </h1>
+            <p style={{ fontSize: 15, color: 'rgba(255,255,255,0.85)', lineHeight: 1.7, marginBottom: 24, maxWidth: 520 }}>
+              CarePath removes the transportation and communication failures that cause missed care.
+            </p>
+            <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+              <Link href="/coordinator/pooling" style={{
+                display: 'inline-flex', alignItems: 'center', gap: 8,
+                padding: '13px 22px', borderRadius: 12, fontSize: 15, fontWeight: 700,
+                background: '#1b9c86', color: '#fff', textDecoration: 'none',
+                minHeight: 48, touchAction: 'manipulation',
+              }}>
+                Open Pooling Hub <ArrowRight size={16} />
+              </Link>
+              <a href="#validation" style={{
+                display: 'inline-flex', alignItems: 'center', gap: 8,
+                padding: '13px 22px', borderRadius: 12, fontSize: 15, fontWeight: 700,
+                background: 'rgba(255,255,255,0.12)', color: '#fff', textDecoration: 'none',
+                border: '1px solid rgba(255,255,255,0.25)',
+                minHeight: 48, touchAction: 'manipulation',
+              }}>
+                View evidence
+              </a>
             </div>
           </div>
         </section>
 
         {/* Stats */}
-        <section style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 16, marginTop: 32 }}>
+        <section className="cp-grid-4" style={{ marginTop: 20 }}>
           {stats.map(({ value, label, color }) => (
             <div key={label} style={{
-              background: '#fff', borderRadius: 16, border: '1px solid #e2e8f0',
-              boxShadow: '0 1px 3px rgba(0,0,0,0.06)', padding: '20px 24px',
+              background: '#fff', borderRadius: 14, border: '1px solid #e2e8f0',
+              boxShadow: '0 1px 3px rgba(0,0,0,0.06)', padding: '16px 20px',
               borderTop: `3px solid ${color}`,
             }}>
-              <p style={{ fontSize: 32, fontWeight: 800, color, lineHeight: 1 }}>{value}</p>
+              <p style={{ fontSize: 28, fontWeight: 800, color, lineHeight: 1 }}>{value}</p>
               <p style={{ fontSize: 13, color: '#64748b', marginTop: 6, fontWeight: 500 }}>{label}</p>
             </div>
           ))}
         </section>
 
         {/* Pillars */}
-        <section style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 20, marginTop: 32 }}>
+        <section className="cp-grid-3" style={{ marginTop: 20 }}>
           {pillars.map(({ icon: Icon, color, bg, title, description }) => (
             <div key={title} style={{
-              background: '#fff', borderRadius: 18, border: '1px solid #e2e8f0',
-              boxShadow: '0 1px 3px rgba(0,0,0,0.06)', padding: 24,
+              background: '#fff', borderRadius: 16, border: '1px solid #e2e8f0',
+              boxShadow: '0 1px 3px rgba(0,0,0,0.06)', padding: 20,
             }}>
-              <div style={{ width: 44, height: 44, borderRadius: 12, background: bg, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 16 }}>
+              <div style={{ width: 44, height: 44, borderRadius: 12, background: bg, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 14 }}>
                 <Icon size={22} style={{ color }} />
               </div>
-              <h3 style={{ fontSize: 16, fontWeight: 700, color: '#0f172a', marginBottom: 8 }}>{title}</h3>
+              <h3 style={{ fontSize: 15, fontWeight: 700, color: '#0f172a', marginBottom: 6 }}>{title}</h3>
               <p style={{ fontSize: 14, color: '#64748b', lineHeight: 1.6 }}>{description}</p>
             </div>
           ))}
@@ -194,7 +164,7 @@ export default function Home() {
               Validation-backed direction — 15 interviews, 13 strong signals
             </p>
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16 }}>
+          <div className="cp-grid-3" style={{ marginTop: 16 }}>
             {[
               'Night-before no-provider calls repeatedly create no-recovery windows for caregivers.',
               'Rigid 72-hour scheduling rules fail urgent but non-emergency medical events.',
@@ -213,24 +183,22 @@ export default function Home() {
 
         {/* CTA */}
         <section style={{
-          marginTop: 32, borderRadius: 20, padding: '40px 48px',
+          marginTop: 20, borderRadius: 18, padding: '32px 24px',
           background: 'linear-gradient(135deg, #5540a1, #0c6bc2)',
-          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
           boxShadow: '0 8px 32px rgba(85,64,161,0.25)',
         }}>
-          <div>
-            <h2 style={{ fontSize: 24, fontWeight: 800, color: '#fff', marginBottom: 8 }}>
-              Ready to coordinate care transport?
-            </h2>
-            <p style={{ fontSize: 15, color: 'rgba(255,255,255,0.8)' }}>
-              Open the pooling hub or submit a patient ride request.
-            </p>
-          </div>
-          <div style={{ display: 'flex', gap: 12, flexShrink: 0 }}>
+          <h2 style={{ fontSize: 22, fontWeight: 800, color: '#fff', marginBottom: 8 }}>
+            Ready to coordinate care transport?
+          </h2>
+          <p style={{ fontSize: 15, color: 'rgba(255,255,255,0.8)', marginBottom: 20 }}>
+            Open the pooling hub or submit a patient ride request.
+          </p>
+          <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
             <Link href="/coordinator/pooling" style={{
               display: 'inline-flex', alignItems: 'center', gap: 8,
               padding: '12px 22px', borderRadius: 12, fontSize: 14, fontWeight: 700,
               background: '#fff', color: '#5540a1', textDecoration: 'none',
+              minHeight: 48, touchAction: 'manipulation',
             }}>
               Coordinator Hub <ArrowRight size={15} />
             </Link>
@@ -239,6 +207,7 @@ export default function Home() {
               padding: '12px 22px', borderRadius: 12, fontSize: 14, fontWeight: 700,
               background: 'rgba(255,255,255,0.15)', color: '#fff', textDecoration: 'none',
               border: '1px solid rgba(255,255,255,0.3)',
+              minHeight: 48, touchAction: 'manipulation',
             }}>
               Patient Intake
             </Link>

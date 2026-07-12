@@ -12,12 +12,7 @@ export function Topbar({ title, subtitle, onMenuClick }: TopbarProps) {
   return (
     <header className="cp-topbar">
       <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-        <button onClick={onMenuClick} style={{
-          display: 'none', padding: 8, borderRadius: 10, border: 'none',
-          background: 'transparent', cursor: 'pointer', color: '#64748b',
-        }}
-          className="cp-menu-btn"
-        >
+        <button onClick={onMenuClick} className="cp-menu-btn">
           <Menu size={20} />
         </button>
         <div>
