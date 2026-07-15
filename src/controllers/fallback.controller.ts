@@ -12,9 +12,10 @@ export const getFallbackOptions = async (req: AuthRequest, res: Response, next: 
 
     const ride = await prisma.rideRequest.findUnique({ where: { id: rideId } });
     if (!ride) return next(new AppError('Ride not found', 404));
+    if (!req.user) return next(new AppError('Not authorized', 403));
 
     // Check authorization — coordinator, patient, or advocate can view
-    if (req.user?.role === Role.COORDINATOR) {
+    if (req.user.role === Role.COORDINATOR) {
       const coordinator = await prisma.coordinator.findUnique({ where: { userId: req.user.userId } });
       if (!coordinator || ride.coordinatorId !== coordinator.id) {
         return next(new AppError('Not authorized for this ride', 403));

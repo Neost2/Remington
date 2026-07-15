@@ -1,0 +1,198 @@
+@baseUrl = http://localhost:3001
+@patientToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJjbXJtZXp0NWQwMDAwcWRybXNyb3owazVnIiwicm9sZSI6IlBBVElFTlQiLCJpYXQiOjE3ODQxNDAxNzQsImV4cCI6MTc4NDc0NDk3NH0.NauCQ1UNQ1PGaSwoTxwsOJH0xPZJvsQ4MkRHFAO6Hyc
+@driverToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJjbXJsNXo2eXMwMDAzZDVxeHRkOGp1Nml1Iiwicm9sZSI6IkRSSVZFUiIsImlhdCI6MTc4NDE0MjI1NywiZXhwIjoxNzg0NzQ3MDU3fQ.3OMKr9a9UASY3dq3StTGUDPGNDjK4DIdeDGhD8lirWI
+@coordinatorToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJjbXJsNXo2cXAwMDAwZDVxeDluZm1tNTI0Iiwicm9sZSI6IkNPT1JESU5BVE9SIiwiaWF0IjoxNzg0MTQwODk2LCJleHAiOjE3ODQ3NDU2OTZ9.2-5ga1vSbacaPx5nO7NL2_2E9OPUWSBVoFDxWDoSvEE
+@rideId = cmrme8kjf000q6cspjlcmpc3y/
+@driverId = cmrl5z751000fd5qxdcq2uo5j
+
+### Health check
+GET {{baseUrl}}/health
+
+### Register patient
+POST {{baseUrl}}/api/auth/register
+Content-Type: application/json
+
+{
+  "firstName": "Test",
+  "lastName": "Patient",
+  "email": "test.patient@carepath.test",
+  "phone": "5551112222",
+  "password": "Password123!",
+  "role": "PATIENT"
+}
+
+### Login patient
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "patient1@carepath.test",
+  "password": "Password123!"
+}
+
+### Get current patient
+GET {{baseUrl}}/api/auth/me
+Authorization: Bearer {{patientToken}}
+
+### Create or update patient profile
+PUT {{baseUrl}}/api/patients/profile
+Authorization: Bearer {{patientToken}}
+Content-Type: application/json
+
+{
+  "county": "Cook",
+  "state": "IL",
+  "zipCode": "60601",
+  "hasSmartphone": true,
+  "prefersSms": true,
+  "prefersVoice": false,
+  "primaryLanguage": "English",
+  "notes": "Test patient profile"
+}
+
+### Get patient profile
+GET {{baseUrl}}/api/patients/profile
+Authorization: Bearer {{patientToken}}
+
+### Patient creates ride request
+POST {{baseUrl}}/api/rides
+Authorization: Bearer {{patientToken}}
+Content-Type: application/json
+
+{
+  "appointmentType": "CARDIOLOGY",
+  "clinicName": "Cook County Heart Clinic",
+  "clinicCity": "Chicago",
+  "clinicState": "IL",
+  "appointmentDate": "2026-08-01T15:00:00.000Z",
+  "estimatedMiles": 22,
+  "isRecurring": false,
+  "appointmentNotes": "Test ride request",
+  "pickupAddress": "100 Demo Patient St, Chicago, IL",
+  "pickupTime": "2026-08-01T13:30:00.000Z",
+  "urgencyLevel": "NORMAL",
+  "needsSameDayFallback": false
+}
+
+### Patient gets own rides
+GET {{baseUrl}}/api/rides/my
+Authorization: Bearer {{patientToken}}
+
+### Login coordinator
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "coordinator@carepath.test",
+  "password": "Password123!"
+}
+
+### Get coordinator profile
+GET {{baseUrl}}/api/coordinators/profile
+Authorization: Bearer {{coordinatorToken}}
+
+### Coordinator stats
+GET {{baseUrl}}/api/coordinators/stats
+Authorization: Bearer {{coordinatorToken}}
+
+### Coordinator rides in county
+GET {{baseUrl}}/api/coordinators/rides
+Authorization: Bearer {{coordinatorToken}}
+
+### Coordinator gets pending rides
+GET {{baseUrl}}/api/rides/pending
+Authorization: Bearer {{coordinatorToken}}
+
+### Coordinator gets available drivers
+GET {{baseUrl}}/api/drivers/available?county=Cook&state=IL
+Authorization: Bearer {{coordinatorToken}}
+
+### Coordinator gets wheelchair drivers
+GET {{baseUrl}}/api/drivers/available?county=Cook&state=IL&wheelchair=true
+Authorization: Bearer {{coordinatorToken}}
+
+### Coordinator gets pooling options
+GET {{baseUrl}}/api/rides/cmrme8kjf000q6cspjlcmpc3y/pooling-options
+Authorization: Bearer {{coordinatorToken}}
+
+### Coordinator assigns driver
+PATCH {{baseUrl}}/api/rides/cmrme8kjf000q6cspjlcmpc3y/assign
+Authorization: Bearer {{coordinatorToken}}
+Content-Type: application/json
+
+{
+  "driverId": "cmrl5z751000fd5qxdcq2uo5j"
+}
+
+### Coordinator triggers fallback
+PATCH {{baseUrl}}/api/rides/cmrme8kjf000q6cspjlcmpc3y/fallback
+Authorization: Bearer {{coordinatorToken}}
+
+### Login driver
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "driver1@carepath.test",
+  "password": "Password123!"
+}
+
+### Get driver profile
+GET {{baseUrl}}/api/drivers/profile
+Authorization: Bearer {{driverToken}}
+
+### Driver toggles availability
+PATCH {{baseUrl}}/api/drivers/availability
+Authorization: Bearer {{driverToken}}
+Content-Type: application/json
+
+{
+  "isAvailableNow": true
+}
+
+### Driver confirms ride
+PATCH {{baseUrl}}/api/rides/{{rideId}}/status
+Authorization: Bearer {{driverToken}}
+Content-Type: application/json
+
+{
+  "status": "CONFIRMED",
+  "reason": "Driver confirmed pickup"
+}
+
+### Driver starts ride
+PATCH {{baseUrl}}/api/rides/{{rideId}}/status
+Authorization: Bearer {{driverToken}}
+Content-Type: application/json
+
+{
+  "status": "IN_PROGRESS",
+  "reason": "Patient picked up"
+}
+
+### Driver completes ride
+PATCH {{baseUrl}}/api/rides/{{rideId}}/status
+Authorization: Bearer {{driverToken}}
+Content-Type: application/json
+
+{
+  "status": "COMPLETED",
+  "reason": "Patient dropped off"
+}
+
+### Patient submits survey
+POST {{baseUrl}}/api/survey
+Authorization: Bearer {{patientToken}}
+Content-Type: application/json
+
+{
+  "rideRequestId": "{{rideId}}",
+  "score": 9,
+  "comment": "Driver was on time and helpful.",
+  "wouldUseAgain": true,
+  "issueResolved": true
+}
+
+### Coordinator views survey responses
+GET {{baseUrl}}/api/survey
+Authorization: Bearer {{coordinatorToken}}

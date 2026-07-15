@@ -35,6 +35,7 @@ app.use('/api/rides', rideRoutes);
 app.use('/api/credits', creditRoutes);
 app.use('/api/ride-events', rideEventRoutes);
 app.use('/api/survey-responses', surveyResponseRoutes);
+app.use('/api/survey', surveyResponseRoutes);
 app.use('/api/ride-cost-logs', rideCostLogRoutes);
 app.use('/api/communication-logs', communicationLogRoutes);
 app.use('/api/payments', paymentRoutes);

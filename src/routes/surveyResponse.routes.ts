@@ -1,10 +1,19 @@
-// SurveyResponse routes
 import { Router } from 'express';
-import * as surveyController from '../controllers/surveyResponse.controller';
+import { authenticate, requireRole } from '../middleware/auth';
+import {
+  createSurveyResponse,
+  getSurveyResponses,
+} from '../controllers/surveyResponse.controller';
+import { Role } from '@prisma/client';
 
 const router = Router();
 
-router.post('/', surveyController.createSurveyResponse);
-router.get('/', surveyController.getSurveyResponses);
+router.use(authenticate);
+
+// Patient submits post-ride survey
+router.post('/', requireRole(Role.PATIENT), createSurveyResponse);
+
+// Coordinator/Admin can view surveys
+router.get('/', requireRole(Role.COORDINATOR, Role.ADMIN), getSurveyResponses);
 
 export default router;

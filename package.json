@@ -15,6 +15,7 @@
     "prisma:migrate": "prisma migrate dev",
     "prisma:deploy": "prisma migrate deploy",
     "prisma:studio": "prisma studio",
+    "seed": "node scripts/seed.js",
     "test": "jest --runInBand --forceExit"
   },
   "dependencies": {

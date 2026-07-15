@@ -2,7 +2,7 @@ import { Response, NextFunction } from 'express';
 import prisma from '../config/database';
 import { AuthRequest } from '../middleware/auth';
 import { AppError } from '../middleware/errorHandler';
-import { RideStatus, UrgencyLevel, AccessibilityRequirement } from '@prisma/client';
+import { Driver, RideStatus, UrgencyLevel, AccessibilityRequirement, Role } from '@prisma/client';
 
 const WHEELCHAIR_ACCESSIBILITY_REQUIREMENTS: AccessibilityRequirement[] = [
   AccessibilityRequirement.WHEELCHAIR_ACCESSIBLE,
@@ -130,7 +130,7 @@ export const assignDriver = async (req: AuthRequest, res: Response, next: NextFu
           oldStatus: RideStatus.PENDING,
           newStatus: RideStatus.MATCHED,
           reason: 'Coordinator assigned a fallback/community driver',
-          actorRole: req.user?.role,
+          actorRole: req.user?.role as Role,
           actorId: req.user?.userId,
         },
       });
@@ -142,7 +142,7 @@ export const assignDriver = async (req: AuthRequest, res: Response, next: NextFu
           oldStatus: RideStatus.PENDING,
           newStatus: RideStatus.MATCHED,
           reason: 'Coordinator assigned a primary network driver',
-          actorRole: req.user?.role,
+          actorRole: req.user?.role as Role,
           actorId: req.user?.userId,
         },
       });
@@ -179,7 +179,7 @@ export const getPoolingOptions = async (req: AuthRequest, res: Response, next: N
       : hoursUntilPickup <= 24 ? 'high'
       : 'normal';
 
-    const drivers = await prisma.driver.findMany({
+    const drivers: Array<Driver & { user: { firstName: string; lastName: string; phone: string } }> = await prisma.driver.findMany({
       where: {
         county: ride.patient.county,
         state: ride.patient.state,
@@ -215,11 +215,11 @@ export const getPoolingOptions = async (req: AuthRequest, res: Response, next: N
 
     const primaryPool = mapped
       .filter((candidate) => candidate.poolType === 'primary')
-      .sort((a, b) => b.matchScore - a.matchScore);
+      .sort((a: typeof mapped[number], b: typeof mapped[number]) => b.matchScore - a.matchScore);
 
     const communityPool = mapped
       .filter((candidate) => candidate.poolType === 'community')
-      .sort((a, b) => b.matchScore - a.matchScore);
+      .sort((a: typeof mapped[number], b: typeof mapped[number]) => b.matchScore - a.matchScore);
 
     const recommendedActions: string[] = [];
     if (needsWheelchairAccessible) {
@@ -350,6 +350,195 @@ export const listAllRides = async (_req: AuthRequest, res: Response, next: NextF
       orderBy: { createdAt: 'desc' },
     });
     res.json(rides);
+  } catch (err) {
+    next(err);
+  }
+};
+
+// Patient: get their own ride history
+export const getMyRides = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  try {
+    const patient = await prisma.patient.findUnique({
+      where: { userId: req.user!.userId },
+    });
+
+    if (!patient) return next(new AppError('Patient profile not found', 404));
+
+    const rides = await prisma.rideRequest.findMany({
+      where: { patientId: patient.id },
+      include: {
+        appointment: true,
+        driver: {
+          include: {
+            user: {
+              select: {
+                firstName: true,
+                lastName: true,
+                phone: true,
+                email: true,
+              },
+            },
+          },
+        },
+        coordinator: {
+          include: {
+            user: {
+              select: {
+                firstName: true,
+                lastName: true,
+                phone: true,
+                email: true,
+              },
+            },
+          },
+        },
+        fallbackOffers: true,
+        events: {
+          orderBy: { createdAt: 'desc' },
+          take: 10,
+        },
+      },
+      orderBy: { createdAt: 'desc' },
+    });
+
+    res.json(rides);
+  } catch (err) {
+    next(err);
+  }
+};
+
+// Driver/Coordinator: update ride status
+export const updateRideStatus = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  try {
+    const { rideId } = req.params;
+    const { status, reason } = req.body;
+
+    const allowedStatuses: RideStatus[] = [
+      RideStatus.CONFIRMED,
+      RideStatus.IN_PROGRESS,
+      RideStatus.COMPLETED,
+      RideStatus.CANCELLED,
+      RideStatus.FALLBACK_NEEDED,
+    ];
+
+    if (!allowedStatuses.includes(status)) {
+      return next(new AppError('Invalid ride status', 400));
+    }
+
+    const ride = await prisma.rideRequest.findUnique({
+      where: { id: rideId },
+      include: {
+        driver: true,
+        patient: true,
+      },
+    });
+
+    if (!ride) return next(new AppError('Ride not found', 404));
+
+    // Drivers can only update rides assigned to them
+    if (req.user!.role === Role.DRIVER) {
+      const driver = await prisma.driver.findUnique({
+        where: { userId: req.user!.userId },
+      });
+
+      if (!driver || ride.driverId !== driver.id) {
+        return next(new AppError('Not authorized to update this ride', 403));
+      }
+
+      const driverAllowedStatuses: RideStatus[] = [
+        RideStatus.CONFIRMED,
+        RideStatus.IN_PROGRESS,
+        RideStatus.COMPLETED,
+      ];
+
+      if (!driverAllowedStatuses.includes(status)) {
+        return next(new AppError('Drivers can only confirm, start, or complete rides', 400));
+      }
+    }
+
+    // Coordinators can only update rides in their assigned county/state
+    if (req.user!.role === Role.COORDINATOR) {
+      const coordinator = await prisma.coordinator.findUnique({
+        where: { userId: req.user!.userId },
+      });
+
+      if (!coordinator) return next(new AppError('Coordinator profile not found', 404));
+
+      if (
+        ride.patient.county !== coordinator.county ||
+        ride.patient.state !== coordinator.state
+      ) {
+        return next(new AppError('Not authorized to update rides outside your county', 403));
+      }
+    }
+
+    const oldStatus = ride.status;
+
+    const updatedRide = await prisma.rideRequest.update({
+      where: { id: rideId },
+      data: { status },
+      include: {
+        appointment: true,
+        patient: {
+          include: {
+            user: {
+              select: {
+                firstName: true,
+                lastName: true,
+                phone: true,
+                email: true,
+              },
+            },
+          },
+        },
+        driver: {
+          include: {
+            user: {
+              select: {
+                firstName: true,
+                lastName: true,
+                phone: true,
+                email: true,
+              },
+            },
+          },
+        },
+        coordinator: {
+          include: {
+            user: {
+              select: {
+                firstName: true,
+                lastName: true,
+                phone: true,
+                email: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    await prisma.rideEvent.create({
+      data: {
+        rideRequestId: ride.id,
+        eventType: 'STATUS_UPDATED',
+        oldStatus,
+        newStatus: status,
+        reason: reason || `Ride status updated from ${oldStatus} to ${status}`,
+        actorRole: req.user!.role as Role,
+        actorId: req.user!.userId,
+      },
+    });
+
+    res.json(updatedRide);
   } catch (err) {
     next(err);
   }
