@@ -6,9 +6,9 @@
 
 **Team Members:**
 
-- Michelle Borkiano
-- Desmond Balentine
-- Remington Mustadter
+- Michelle Berthiaume
+- Demond Balentine
+- Remington Neustadter
 
 **Team Vision/Purpose (Reason for the team. What is/are the group goal(s)?):**
 Build a transportation coordination tool that helps people access care reliably and on time.
@@ -34,9 +34,9 @@ The platform is completed, functional, and deliverable as a usable product.
 
 | Name | Skills/Strengths | Group Skills to Work On | Stressors | Group Role(s) |
 | --- | --- | --- | --- | --- |
-| Michelle Borkiano | Research, communication, design | Prioritization under pressure | Too many large tasks at once | Design, communication |
-| Desmond Balentine | Architecture, communication, backend leadership | Delegation and schedule balancing | Missed deadlines | Product design, project lead |
-| Remington Mustadter | Coding, troubleshooting, leadership, teamwork | Time estimation and pacing | Missed deadlines | Floater/support role to keep project grounded and unblocked |
+| Michelle Berthiaume | Research, communication, design | Prioritization under pressure | Too many large tasks at once | Design, communication |
+| Demond Balentine | Architecture, communication, backend leadership | Delegation and schedule balancing | Missed deadlines | Product design, project lead |
+| Remington Neustadter | Coding, troubleshooting, leadership, teamwork | Time estimation and pacing | Missed deadlines | Floater/support role to keep project grounded and unblocked |
 
 ---
 
@@ -102,15 +102,15 @@ The platform is completed, functional, and deliverable as a usable product.
 
 ## Signatures
 
-- Member 1 Printed Name: Michelle Borkiano
+- Member 1 Printed Name: Michelle Berthiaume
 - Member 1 Signature: ______________________________
 - Date: 07/13/2026
 
-- Member 2 Printed Name: Remington Mustadter
+- Member 2 Printed Name: Remington Neustadter
 - Member 2 Signature: ______________________________
 - Date: 07/13/2026
 
-- Member 3 Printed Name: Desmond Balentine
+- Member 3 Printed Name: Demond Balentine
 - Member 3 Signature: ______________________________
 - Date: 07/15/2026
 
