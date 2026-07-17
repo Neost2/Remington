@@ -1,5 +1,5 @@
 import prisma from '../config/database';
-import { TransportationProviderType, RideStatus, PaymentStatus } from '@prisma/client';
+import { TransportationProviderType, RideStatus, PaymentStatus, Role } from '@prisma/client';
 import { calculateRideCost } from './payment.service';
 
 export interface FallbackCandidate {
@@ -276,7 +276,7 @@ export const selectFallbackOption = async (
       oldStatus: RideStatus.FALLBACK_NEEDED,
       newStatus: RideStatus.MATCHED,
       reason: `Fallback selected: ${offer.providerName} (${offer.providerType})`,
-      actorRole: actorRole as any,
+      actorRole: Object.values(Role).includes(actorRole as Role) ? actorRole as Role : null,
       actorId: selectedByUserId,
     },
   });

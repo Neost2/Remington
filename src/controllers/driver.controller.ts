@@ -10,6 +10,7 @@ export const upsertProfile = async (
   next: NextFunction
 ): Promise<void> => {
   try {
+    if (!req.user?.userId) return next(new AppError('Unauthorized', 401));
     const {
       county,
       state,
@@ -28,7 +29,7 @@ export const upsertProfile = async (
       baseFeeCents,
     } = req.body;
 
-    const userId = req.user!.userId;
+    const userId = req.user.userId;
 
     const driver = await prisma.driver.upsert({
       where: { userId },
@@ -82,8 +83,9 @@ export const getProfile = async (
   next: NextFunction
 ): Promise<void> => {
   try {
+    if (!req.user?.userId) return next(new AppError('Unauthorized', 401));
     const driver = await prisma.driver.findUnique({
-      where: { userId: req.user!.userId },
+      where: { userId: req.user.userId },
       include: {
         user: {
           select: {
@@ -117,8 +119,9 @@ export const setAvailability = async (
       return next(new AppError('isAvailableNow must be true or false', 400));
     }
 
+    if (!req.user?.userId) return next(new AppError('Unauthorized', 401));
     const existingDriver = await prisma.driver.findUnique({
-      where: { userId: req.user!.userId },
+      where: { userId: req.user.userId },
     });
 
     if (!existingDriver) {
@@ -126,7 +129,7 @@ export const setAvailability = async (
     }
 
     const driver = await prisma.driver.update({
-      where: { userId: req.user!.userId },
+      where: { userId: req.user.userId },
       data: { isAvailableNow },
     });
 

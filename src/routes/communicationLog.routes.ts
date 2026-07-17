@@ -6,12 +6,15 @@ import * as commLogController from '../controllers/communicationLog.controller';
 
 const router = Router();
 
-router.post('/', commLogController.createCommunicationLog);
-router.get('/user/:userId', commLogController.getCommunicationLogsForUser);
+// All communication log routes require authentication
+router.use(authenticate);
 
-// Portal endpoints (authenticated)
-router.get('/ride/:rideId', authenticate, commLogController.getLogsForRide);
-router.post('/portal', authenticate, commLogController.postPortalMessage);
-router.get('/portal/recent', authenticate, requireRole(Role.COORDINATOR, Role.ADMIN), commLogController.getRecentPortalLogs);
+router.post('/', requireRole(Role.COORDINATOR, Role.ADMIN), commLogController.createCommunicationLog);
+router.get('/user/:userId', requireRole(Role.COORDINATOR, Role.ADMIN), commLogController.getCommunicationLogsForUser);
+
+// Portal endpoints
+router.get('/ride/:rideId', commLogController.getLogsForRide);
+router.post('/portal', commLogController.postPortalMessage);
+router.get('/portal/recent', requireRole(Role.COORDINATOR, Role.ADMIN), commLogController.getRecentPortalLogs);
 
 export default router;

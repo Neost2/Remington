@@ -11,8 +11,10 @@ export const upsertProfile = async (
   next: NextFunction
 ): Promise<void> => {
   try {
+    if (!req.user?.userId) return next(new AppError('Unauthorized', 401));
     const { county, state, organization, stipendActive, isVerified } = req.body;
-    const userId = req.user!.userId;
+    if (!county || !state) return next(new AppError('county and state are required', 400));
+    const userId = req.user.userId;
 
     const coordinator = await prisma.coordinator.upsert({
       where: { userId },
@@ -46,8 +48,9 @@ export const getProfile = async (
   next: NextFunction
 ): Promise<void> => {
   try {
+    if (!req.user?.userId) return next(new AppError('Unauthorized', 401));
     const coordinator = await prisma.coordinator.findUnique({
-      where: { userId: req.user!.userId },
+      where: { userId: req.user.userId },
       include: {
         user: {
           select: {
@@ -75,8 +78,9 @@ export const listRidesInCounty = async (
   next: NextFunction
 ): Promise<void> => {
   try {
+    if (!req.user?.userId) return next(new AppError('Unauthorized', 401));
     const coordinator = await prisma.coordinator.findUnique({
-      where: { userId: req.user!.userId },
+      where: { userId: req.user.userId },
     });
 
     if (!coordinator) return next(new AppError('Coordinator profile not found', 404));
@@ -131,8 +135,9 @@ export const getDashboardStats = async (
   next: NextFunction
 ): Promise<void> => {
   try {
+    if (!req.user?.userId) return next(new AppError('Unauthorized', 401));
     const coordinator = await prisma.coordinator.findUnique({
-      where: { userId: req.user!.userId },
+      where: { userId: req.user.userId },
     });
 
     if (!coordinator) return next(new AppError('Coordinator profile not found', 404));
@@ -249,8 +254,9 @@ export const createDepotRoute = async (
   next: NextFunction
 ): Promise<void> => {
   try {
+    if (!req.user?.userId) return next(new AppError('Unauthorized', 401));
     const coordinator = await prisma.coordinator.findUnique({
-      where: { userId: req.user!.userId },
+      where: { userId: req.user.userId },
     });
 
     if (!coordinator) return next(new AppError('Coordinator profile not found', 404));

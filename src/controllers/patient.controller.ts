@@ -6,8 +6,11 @@ import { AppError } from '../middleware/errorHandler';
 // Create or update patient profile (called after registration)
 export const upsertProfile = async (req: AuthRequest, res: Response, next: NextFunction): Promise<void> => {
   try {
+    if (!req.user?.userId) return next(new AppError('Unauthorized', 401));
     const { county, state, zipCode, hasSmartphone, prefersSms, prefersVoice, primaryLanguage, notes } = req.body;
-    const userId = req.user!.userId;
+    const userId = req.user.userId;
+
+    if (!county || !state || !zipCode) return next(new AppError('county, state, and zipCode are required', 400));
 
     const patient = await prisma.patient.upsert({
       where: { userId },
@@ -23,8 +26,9 @@ export const upsertProfile = async (req: AuthRequest, res: Response, next: NextF
 
 export const getProfile = async (req: AuthRequest, res: Response, next: NextFunction): Promise<void> => {
   try {
+    if (!req.user?.userId) return next(new AppError('Unauthorized', 401));
     const patient = await prisma.patient.findUnique({
-      where: { userId: req.user!.userId },
+      where: { userId: req.user.userId },
       include: {
         user: { select: { firstName: true, lastName: true, email: true, phone: true } },
       },
@@ -38,7 +42,8 @@ export const getProfile = async (req: AuthRequest, res: Response, next: NextFunc
 
 export const getMyRides = async (req: AuthRequest, res: Response, next: NextFunction): Promise<void> => {
   try {
-    const patient = await prisma.patient.findUnique({ where: { userId: req.user!.userId } });
+    if (!req.user?.userId) return next(new AppError('Unauthorized', 401));
+    const patient = await prisma.patient.findUnique({ where: { userId: req.user.userId } });
     if (!patient) return next(new AppError('Patient profile not found', 404));
 
     const rides = await prisma.rideRequest.findMany({
