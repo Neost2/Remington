@@ -155,29 +155,10 @@ export default function Home() {
             }}
           >
             <UserRound size={16} />
-            Customer Login
+             Login
           </Link>
 
-          <Link
-            href="/driver/login"
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: 7,
-              padding: "9px 16px",
-              borderRadius: 10,
-              fontSize: 14,
-              fontWeight: 700,
-              background: "#d8dff2",
-              color: "#5540a1",
-              border: "1px solid #ddd6fe",
-              textDecoration: "none",
-            }}
-          >
-            <CarFront size={16} />
-            Driver Login
-          </Link>
-
+         
           <Link
             href="/coordinator"
             style={{
