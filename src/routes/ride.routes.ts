@@ -28,6 +28,9 @@ router.get('/:rideId/pooling-options', requireRole(Role.COORDINATOR), getPooling
 router.patch('/:rideId/assign', requireRole(Role.COORDINATOR), assignDriver);
 router.patch('/:rideId/fallback', requireRole(Role.COORDINATOR), triggerFallback);
 
+// Driver routes
+router.get('/my-driver-rides', requireRole(Role.DRIVER), getMyRides);
+
 // Driver/Coordinator routes
 router.patch('/:rideId/status', requireRole(Role.DRIVER, Role.COORDINATOR), updateRideStatus);
 router.patch('/:rideId/confirm', requireRole(Role.DRIVER), confirmRide);

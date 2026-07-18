@@ -47,8 +47,9 @@ export const login = async (req: Request, res: Response, next: NextFunction): Pr
 
 export const me = async (req: Request & { user?: { userId: string; role: string } }, res: Response, next: NextFunction): Promise<void> => {
   try {
+    if (!req.user?.userId) return next(new AppError('Unauthorized', 401));
     const user = await prisma.user.findUnique({
-      where: { id: req.user!.userId },
+      where: { id: req.user.userId },
       select: { id: true, email: true, phone: true, role: true, firstName: true, lastName: true, createdAt: true },
     });
     if (!user) return next(new AppError('User not found', 404));

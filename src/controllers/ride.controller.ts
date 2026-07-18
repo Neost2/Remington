@@ -28,7 +28,8 @@ export const createRideRequest = async (req: AuthRequest, res: Response, next: N
       requestedAdvanceWindowHours,
     } = req.body;
 
-    const patient = await prisma.patient.findUnique({ where: { userId: req.user!.userId } });
+    if (!req.user?.userId) return next(new AppError('Unauthorized', 401));
+    const patient = await prisma.patient.findUnique({ where: { userId: req.user.userId } });
     if (!patient) return next(new AppError('Patient profile required before requesting a ride', 400));
 
     // Find an active coordinator in the patient's county
@@ -86,7 +87,8 @@ export const createRideRequest = async (req: AuthRequest, res: Response, next: N
 // Coordinator: list all pending rides in their county
 export const getPendingRides = async (req: AuthRequest, res: Response, next: NextFunction): Promise<void> => {
   try {
-    const coordinator = await prisma.coordinator.findUnique({ where: { userId: req.user!.userId } });
+    if (!req.user?.userId) return next(new AppError('Unauthorized', 401));
+    const coordinator = await prisma.coordinator.findUnique({ where: { userId: req.user.userId } });
     if (!coordinator) return next(new AppError('Coordinator profile not found', 404));
 
     const rides = await prisma.rideRequest.findMany({
@@ -158,7 +160,8 @@ export const assignDriver = async (req: AuthRequest, res: Response, next: NextFu
 export const getPoolingOptions = async (req: AuthRequest, res: Response, next: NextFunction): Promise<void> => {
   try {
     const { rideId } = req.params;
-    const coordinator = await prisma.coordinator.findUnique({ where: { userId: req.user!.userId } });
+    if (!req.user?.userId) return next(new AppError('Unauthorized', 401));
+    const coordinator = await prisma.coordinator.findUnique({ where: { userId: req.user.userId } });
     if (!coordinator) return next(new AppError('Coordinator profile not found', 404));
 
     const ride = await prisma.rideRequest.findFirst({
@@ -285,7 +288,8 @@ export const triggerFallback = async (req: AuthRequest, res: Response, next: Nex
 export const confirmRide = async (req: AuthRequest, res: Response, next: NextFunction): Promise<void> => {
   try {
     const { rideId } = req.params;
-    const driver = await prisma.driver.findUnique({ where: { userId: req.user!.userId } });
+    if (!req.user?.userId) return next(new AppError('Unauthorized', 401));
+    const driver = await prisma.driver.findUnique({ where: { userId: req.user.userId } });
     if (!driver) return next(new AppError('Driver profile not found', 404));
 
     const ride = await prisma.rideRequest.findFirst({ where: { id: rideId, driverId: driver.id } });
@@ -362,8 +366,9 @@ export const getMyRides = async (
   next: NextFunction
 ): Promise<void> => {
   try {
+    if (!req.user?.userId) return next(new AppError('Unauthorized', 401));
     const patient = await prisma.patient.findUnique({
-      where: { userId: req.user!.userId },
+      where: { userId: req.user.userId },
     });
 
     if (!patient) return next(new AppError('Patient profile not found', 404));
@@ -443,10 +448,11 @@ export const updateRideStatus = async (
 
     if (!ride) return next(new AppError('Ride not found', 404));
 
+    if (!req.user?.userId) return next(new AppError('Unauthorized', 401));
     // Drivers can only update rides assigned to them
-    if (req.user!.role === Role.DRIVER) {
+    if (req.user.role === Role.DRIVER) {
       const driver = await prisma.driver.findUnique({
-        where: { userId: req.user!.userId },
+        where: { userId: req.user.userId },
       });
 
       if (!driver || ride.driverId !== driver.id) {
@@ -465,9 +471,9 @@ export const updateRideStatus = async (
     }
 
     // Coordinators can only update rides in their assigned county/state
-    if (req.user!.role === Role.COORDINATOR) {
+    if (req.user.role === Role.COORDINATOR) {
       const coordinator = await prisma.coordinator.findUnique({
-        where: { userId: req.user!.userId },
+        where: { userId: req.user.userId },
       });
 
       if (!coordinator) return next(new AppError('Coordinator profile not found', 404));
@@ -533,8 +539,8 @@ export const updateRideStatus = async (
         oldStatus,
         newStatus: status,
         reason: reason || `Ride status updated from ${oldStatus} to ${status}`,
-        actorRole: req.user!.role as Role,
-        actorId: req.user!.userId,
+        actorRole: req.user.role as Role,
+        actorId: req.user.userId,
       },
     });
 

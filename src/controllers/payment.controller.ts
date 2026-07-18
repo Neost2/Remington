@@ -2,7 +2,7 @@ import { Response, NextFunction } from 'express';
 import prisma from '../config/database';
 import { AuthRequest } from '../middleware/auth';
 import { AppError } from '../middleware/errorHandler';
-import { FundingSource, PaymentStatus, Role } from '@prisma/client';
+import { FundingSource, PaymentStatus, Role, TransportationProviderType } from '@prisma/client';
 import * as paymentService from '../services/payment.service';
 
 // Create a payment authorization for a patient
@@ -40,7 +40,7 @@ export const createRidePayment = async (req: AuthRequest, res: Response, next: N
       rideRequestId,
       fundingSource as FundingSource,
       estimatedMiles,
-      providerType as any,
+      providerType as TransportationProviderType,
       ride.driver?.perMileRateCents,
       ride.driver?.baseFeeCents,
     );
@@ -50,7 +50,7 @@ export const createRidePayment = async (req: AuthRequest, res: Response, next: N
       where: { id: rideRequestId },
       data: {
         fundingSource: fundingSource as FundingSource,
-        providerType: providerType as any,
+        providerType: providerType as TransportationProviderType,
       },
     });
 
@@ -107,7 +107,7 @@ export const reallocatePayment = async (req: AuthRequest, res: Response, next: N
 
     const payment = await paymentService.reallocatePayment(
       ridePaymentId,
-      newProviderType as any,
+      newProviderType as TransportationProviderType,
       newDriverId,
       newCostCents,
       req.user?.userId,
@@ -135,7 +135,7 @@ export const refundPayment = async (req: AuthRequest, res: Response, next: NextF
       await prisma.rideEvent.create({
         data: {
           rideRequestId: ridePayment.rideRequestId,
-          eventType: 'PAYMENT_CAPTURED',
+          eventType: 'PAYMENT_REFUNDED',
           reason: `Payment refunded: $${(payment.totalCents / 100).toFixed(2)} - ${reason}`,
           actorRole: (req.user?.role ?? null) as Role | null,
           actorId: req.user?.userId,
@@ -152,7 +152,8 @@ export const refundPayment = async (req: AuthRequest, res: Response, next: NextF
 // Get patient's available funding sources
 export const getPatientFunding = async (req: AuthRequest, res: Response, next: NextFunction): Promise<void> => {
   try {
-    const patient = await prisma.patient.findUnique({ where: { userId: req.user!.userId } });
+    if (!req.user?.userId) return next(new AppError('Unauthorized', 401));
+    const patient = await prisma.patient.findUnique({ where: { userId: req.user.userId } });
     if (!patient) return next(new AppError('Patient profile not found', 404));
 
     const funding = await paymentService.getPatientFundingSources(patient.id);
@@ -202,7 +203,8 @@ export const listAllPayments = async (_req: AuthRequest, res: Response, next: Ne
 // Patient: view their payment history
 export const getMyPayments = async (req: AuthRequest, res: Response, next: NextFunction): Promise<void> => {
   try {
-    const patient = await prisma.patient.findUnique({ where: { userId: req.user!.userId } });
+    if (!req.user?.userId) return next(new AppError('Unauthorized', 401));
+    const patient = await prisma.patient.findUnique({ where: { userId: req.user.userId } });
     if (!patient) return next(new AppError('Patient profile not found', 404));
 
     const payments = await prisma.ridePayment.findMany({

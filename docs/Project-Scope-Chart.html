@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>CarePath — Project Scope Chart</title>
+<style>
+  @page { size: Letter; margin: 0.45in 0.5in; }
+  * { box-sizing: border-box; }
+  body {
+    font-family: "Segoe UI", Arial, sans-serif;
+    color: #1a1a1a;
+    margin: 0;
+    font-size: 10.5px;
+    line-height: 1.35;
+  }
+  .header {
+    background: linear-gradient(90deg, #052b56, #0c6bc2);
+    color: #fff;
+    padding: 16px 20px;
+    border-radius: 6px;
+    margin-bottom: 10px;
+  }
+  .header h1 { margin: 0 0 4px 0; font-size: 22px; letter-spacing: 0.5px; }
+  .header .sub { font-size: 11px; opacity: 0.92; }
+  .meta-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 9.5px;
+    margin-top: 10px;
+    padding-top: 8px;
+    border-top: 1px solid rgba(255,255,255,0.35);
+  }
+  .meta-row div strong { display: block; font-size: 9px; opacity: 0.85; font-weight: 600; text-transform: uppercase; letter-spacing: 0.4px; margin-bottom: 2px; }
+
+  .section-title {
+    background: #5540a1;
+    color: #fff;
+    font-weight: 700;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 5px 10px;
+    border-radius: 4px 4px 0 0;
+    margin-top: 10px;
+  }
+  .box {
+    border: 1px solid #d3d3e0;
+    border-top: none;
+    border-radius: 0 0 4px 4px;
+    padding: 8px 10px;
+    background: #fafaff;
+  }
+
+  .two-col { display: flex; gap: 10px; }
+  .two-col > div { flex: 1; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 9.5px; }
+  th, td { border: 1px solid #d3d3e0; padding: 4px 6px; text-align: left; vertical-align: top; }
+  th { background: #e9e6f6; color: #33255e; font-weight: 700; }
+  td.in { background: #eafaf5; }
+  td.out { background: #fdecec; }
+  .tag-in { color: #0c7a52; font-weight: 700; }
+  .tag-out { color: #b3261e; font-weight: 700; }
+
+  ul.compact { margin: 4px 0 4px 16px; padding: 0; }
+  ul.compact li { margin-bottom: 2px; }
+
+  .flow {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 4px;
+    margin: 6px 0 2px 0;
+  }
+  .flow .node {
+    flex: 1;
+    background: #1b9c86;
+    color: #fff;
+    text-align: center;
+    padding: 6px 4px;
+    border-radius: 4px;
+    font-size: 9.5px;
+    font-weight: 700;
+  }
+  .flow .node.alt { background: #b3261e; }
+  .flow .arrow { font-size: 12px; color: #666; }
+
+  .footer-sign {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 12px;
+    font-size: 9.5px;
+  }
+  .footer-sign div { width: 32%; border-top: 1px solid #999; padding-top: 3px; }
+
+  .page-break { page-break-before: always; }
+</style>
+</head>
+<body>
+
+  <div class="header">
+    <h1>CarePath — Project Scope Statement</h1>
+    <div class="sub">Transportation coordination platform for reliable medical ride access — Atlas School Capstone, Builders+Backers Mobility Cohort</div>
+    <div class="meta-row">
+      <div><strong>Project Lead</strong>Demond Balentine (PM/Backend)</div>
+      <div><strong>Team</strong>Michelle Berthiaume (Design/UI) · Remington Neustadter (Technical Support)</div>
+      <div><strong>Demo Day</strong>August 13, 2026</div>
+      <div><strong>Document Date</strong>July 16, 2026</div>
+    </div>
+  </div>
+
+  <!-- Business Need / Objective / Deliverable -->
+  <div class="two-col">
+    <div style="flex: 1.2;">
+      <div class="section-title">Business Need</div>
+      <div class="box">
+        Patients in rural/low-income areas miss critical appointments (dialysis, oncology, cardiology, post-surgical)
+        due to unreliable transportation — not lack of willingness. Validated across 15 stakeholder interviews
+        (13 strong signals): patients, caregivers/RNs/CNAs, drivers, and clinic staff all lack a shared coordination
+        and fallback system, causing no-shows, delayed treatment, and avoidable ER visits.
+      </div>
+    </div>
+    <div style="flex: 1;">
+      <div class="section-title">Project Objective</div>
+      <div class="box">
+        Deliver a working, demo-ready web app (API + mobile-first UI) by <strong>Aug 13, 2026</strong> proving the
+        full ride coordination loop — intake → match/assign → confirm → complete → survey — with automatic
+        fallback escalation, using real auth and seeded demo data.
+      </div>
+    </div>
+  </div>
+
+  <!-- Core workflow boundary -->
+  <div class="section-title">Project Boundary — Core Workflow In Scope</div>
+  <div class="box">
+    <div class="flow">
+      <div class="node">Patient Intake</div>
+      <div class="arrow">→</div>
+      <div class="node">Coordinator Match / Assign</div>
+      <div class="arrow">→</div>
+      <div class="node">Driver Confirms</div>
+      <div class="arrow">→</div>
+      <div class="node">Ride Completed</div>
+      <div class="arrow">→</div>
+      <div class="node">Post-Ride Survey</div>
+    </div>
+    <div class="flow">
+      <div style="flex:2.4"></div>
+      <div class="arrow">↘</div>
+      <div class="node alt">Fallback Escalation (SMS + RideEvent log)</div>
+      <div style="flex:1.6"></div>
+    </div>
+    Bounded to one coordination workflow for three team members, four weeks, built on the already-completed
+    Prisma schema, JWT auth, and initial UI design system — not a full multi-sided marketplace, billing platform,
+    or clinical records system.
+  </div>
+
+  <!-- In Scope / Out of Scope -->
+  <div class="section-title">In Scope vs. Out of Scope</div>
+  <div class="box">
+    <table>
+      <tr><th style="width:50%">✅ In Scope</th><th style="width:50%">🚫 Out of Scope</th></tr>
+      <tr>
+        <td class="in">
+          <ul class="compact">
+            <li>Auth (Patient/Driver/Coordinator roles, JWT)</li>
+            <li>Patient ride intake w/ accessibility &amp; urgency flags</li>
+            <li>Coordinator pooling hub — match, assign, combine rides</li>
+            <li>Fallback escalation (SMS notify + RideEvent log)</li>
+            <li>Driver dashboard &amp; status lifecycle (Confirmed→In Progress→Completed)</li>
+            <li>Live ride status visibility &amp; dashboard stat cards</li>
+            <li>Post-ride NPS survey</li>
+            <li>Communication log (SMS audit trail)</li>
+            <li>Seed data / scripted demo scenarios</li>
+            <li>Mobile-first responsive UI (375–390px)</li>
+            <li>Deployment: Next.js on AWS Amplify + Node/Express API</li>
+          </ul>
+        </td>
+        <td class="out">
+          <ul class="compact">
+            <li>Real payment processing (live gateway)</li>
+            <li>Production-scale / paid SMS carrier rollout</li>
+            <li>HIPAA / compliance certification, security audit</li>
+            <li>EHR integration / Medicaid billing automation</li>
+            <li>Depot route builder (recurring van routes)</li>
+            <li>Driver reliability scoring / gamification</li>
+            <li>Caregiver companion shareable tracking link</li>
+            <li>Voice-call fallback / full SMS-only patient journey</li>
+            <li>Public community impact dashboard</li>
+            <li>Native iOS/Android apps</li>
+            <li>Multi-county/multi-tenant scaling &amp; self-serve onboarding</li>
+          </ul>
+        </td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- Constraints / Assumptions -->
+  <div class="two-col">
+    <div>
+      <div class="section-title">Constraints</div>
+      <div class="box">
+        <ul class="compact">
+          <li>Fixed deadline: Demo Day Aug 13, 2026</li>
+          <li>3-person team, no dedicated QA/security/DevOps role</li>
+          <li>Must build on inherited schema, auth, and design system</li>
+          <li>Free/low-cost infra only (Amplify, Postgres, Twilio trial)</li>
+          <li>Weekly pass/fail milestone gates — slip means cut scope</li>
+          <li>No real PHI storage permitted</li>
+          <li>Demo must run on mobile device / unreliable Wi-Fi (seeded fallback required)</li>
+        </ul>
+      </div>
+    </div>
+    <div>
+      <div class="section-title">Assumptions</div>
+      <div class="box">
+        <ul class="compact">
+          <li>Cohort dates &amp; Demo Day will not change</li>
+          <li>Amplify + Postgres hosting stays available at no unplanned cost</li>
+          <li>Twilio trial credentials suffice for demo-scale SMS</li>
+          <li>Existing 15 interviews/13 signals are sufficient validation</li>
+          <li>Team availability matches the Weekly Schedule plan</li>
+          <li>Current Prisma schema needs no breaking changes</li>
+          <li>No new regulatory requirement applies to a non-production demo</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Business Processes / Interfaces -->
+  <div class="two-col">
+    <div>
+      <div class="section-title">Business Processes Impacted</div>
+      <div class="box">
+        <ul class="compact">
+          <li>Patient care coordination (phone/text → tracked requests)</li>
+          <li>Coordinator dispatch workflow (manual → pooling hub)</li>
+          <li>Driver scheduling &amp; confirmation (informal → structured)</li>
+          <li>Outcome/quality tracking (new post-ride survey loop)</li>
+          <li>Communication audit trail (new SMS logging)</li>
+        </ul>
+      </div>
+    </div>
+    <div>
+      <div class="section-title">Internal &amp; External Interfaces</div>
+      <div class="box">
+        <ul class="compact">
+          <li><strong>Internal:</strong> PM ↔ Backend/UI (GitHub board, PR review); Backend ↔ UI (shared REST API contract); Atlas School / Builders+Backers cohort gates</li>
+          <li><strong>External:</strong> AWS Amplify, PostgreSQL host, Twilio SMS, 15 validation interview participants, Chicago-area healthcare admin advisor</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-title">Scope Change Control</div>
+  <div class="box">
+    Changes raised at the weekly Friday milestone check-in → approved by PM (Demond) after team input → reflected
+    in this document and the Capstone Project Plan. No scope additions accepted after the Aug 6 feature freeze.
+  </div>
+
+  <div class="footer-sign">
+    <div>Demond Balentine — Project Lead</div>
+    <div>Michelle Berthiaume — Design/UI</div>
+    <div>Remington Neustadter — Technical Support</div>
+  </div>
+
+</body>
+</html>

@@ -1,6 +1,10 @@
 import express from 'express';
 import cors from 'cors';
+import helmet from 'helmet';
+import rateLimit from 'express-rate-limit';
 import { errorHandler, notFound } from './middleware/errorHandler';
+import { sanitizeBody } from './middleware/validate';
+import { config } from './config/env';
 
 import authRoutes from './routes/auth.routes';
 import patientRoutes from './routes/patient.routes';
@@ -17,8 +21,47 @@ import fallbackRoutes from './routes/fallback.routes';
 
 const app = express();
 
-app.use(cors());
-app.use(express.json());
+// Security headers
+app.use(helmet());
+
+// CORS — restrict to known origins in production
+const allowedOrigins = config.isDev
+  ? ['http://localhost:3000', 'http://localhost:3001']
+  : (process.env.ALLOWED_ORIGINS ?? '').split(',').map(o => o.trim()).filter(Boolean);
+
+app.use(cors({
+  origin: (origin, cb) => {
+    // Allow requests with no origin (mobile apps, curl, server-to-server)
+    if (!origin || allowedOrigins.includes(origin)) return cb(null, true);
+    cb(new Error(`CORS: origin ${origin} not allowed`));
+  },
+  credentials: true,
+}));
+
+// Rate limiting — 200 requests per 15 min per IP
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 200,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { error: 'Too many requests, please try again later.' },
+});
+app.use('/api/', limiter);
+
+// Stricter limit on auth endpoints
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 20,
+  message: { error: 'Too many login attempts, please try again later.' },
+});
+app.use('/api/auth/', authLimiter);
+
+// Body parsing with size limit
+app.use(express.json({ limit: '50kb' }));
+app.use(express.urlencoded({ extended: true, limit: '50kb' }));
+
+// Global sanitization
+app.use(sanitizeBody);
 
 // Health check
 app.get('/health', (_req, res) => {
