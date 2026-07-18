@@ -1,4 +1,4 @@
-export default function PatientDashboardPage() {
+export default function CoordinatorDashboardPage() {
   return (
     <main style={{ padding: 40 }}>
       <h1>Patient Dashboard</h1>
