@@ -205,7 +205,7 @@ export default function PatientIntakePage() {
             <SectionHeader
               icon="👤"
               title="Personal Information"
-              description="Enter the patient’s basic identifying and address information."
+              description="Enter your information."
             />
 
             <div className="grid gap-6 md:grid-cols-2">
@@ -314,7 +314,7 @@ export default function PatientIntakePage() {
             <SectionHeader
               icon="☎️"
               title="Contact and Communication"
-              description="Choose how CarePath should contact the patient and send ride updates."
+              description="Choose how CarePath should contact you and send ride updates."
             />
 
             <div className="grid gap-6 md:grid-cols-2">
@@ -415,7 +415,7 @@ export default function PatientIntakePage() {
                   className={inputStyles}
                 >
                   <option value="" disabled>
-                    Select a funding source
+                    Select a payment source
                   </option>
                   <option value="MEDICAID_NEMT">Medicaid NEMT</option>
                   <option value="MEDICARE">Medicare</option>
@@ -498,7 +498,7 @@ export default function PatientIntakePage() {
             <SectionHeader
               icon="🏥"
               title="Doctors and Medical Offices"
-              description="Add each doctor, clinic, hospital, pharmacy, or treatment center the patient regularly visits."
+              description="Add each doctor, clinic, hospital, pharmacy, or treatment center you regularly visit."
             />
 
             <div className="space-y-6">
@@ -670,7 +670,7 @@ export default function PatientIntakePage() {
             <SectionHeader
               icon="🚧"
               title="Transportation Barriers"
-              description="Explain circumstances that make it difficult for the patient to reach medical care."
+              description="Explain circumstances that make it difficult for you to reach medical care."
             />
 
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
