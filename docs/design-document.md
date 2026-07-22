@@ -138,7 +138,7 @@ Primary geographic focus: rural and low-income communities in Arkansas and simil
 - How to divide technical work across a team without creating merge conflicts or blockers
 - How to communicate progress and blockers clearly on a weekly cadence
 - How to scope a project realistically and make hard decisions about what to cut
-- How to present a technical product to a non-technical audience (Builders+Backers, Demo Day)
+- How to present a technical product to a non-technical audience (Builders+Backers, Atlas School Demo Day)
 - How to use validation evidence to justify product decisions
 
 ---
