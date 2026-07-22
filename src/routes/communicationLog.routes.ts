@@ -13,8 +13,8 @@ router.post('/', requireRole(Role.COORDINATOR, Role.ADMIN), commLogController.cr
 router.get('/user/:userId', requireRole(Role.COORDINATOR, Role.ADMIN), commLogController.getCommunicationLogsForUser);
 
 // Portal endpoints
-router.get('/ride/:rideId', commLogController.getLogsForRide);
-router.post('/portal', commLogController.postPortalMessage);
+router.get('/ride/:rideId', requireRole(Role.COORDINATOR, Role.DRIVER, Role.PATIENT, Role.ADMIN), commLogController.getLogsForRide);
+router.post('/portal', requireRole(Role.COORDINATOR, Role.DRIVER, Role.ADMIN), commLogController.postPortalMessage);
 router.get('/portal/recent', requireRole(Role.COORDINATOR, Role.ADMIN), commLogController.getRecentPortalLogs);
 
 export default router;
