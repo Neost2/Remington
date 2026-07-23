@@ -19,7 +19,11 @@ export const sanitizeBody = (req: Request, _res: Response, next: NextFunction): 
   if (req.body && typeof req.body === 'object') {
     const dangerous = ['__proto__', 'constructor', 'prototype'];
     for (const key of dangerous) {
-      if (key in req.body) {
+      // Use hasOwnProperty, not the `in` operator — every plain object
+      // inherits `constructor` (and other keys) from Object.prototype, so
+      // `in` would incorrectly flag every request (even ones with an empty
+      // body) as a prototype-pollution attempt.
+      if (Object.prototype.hasOwnProperty.call(req.body, key)) {
         return next(new AppError('Invalid request body', 400));
       }
     }

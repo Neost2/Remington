@@ -1,4 +1,9 @@
 node_modules/
 dist/
+dist-lambda/
 .env
 *.log
+infra/node_modules/
+infra/bin/
+.neon
+.agents/
