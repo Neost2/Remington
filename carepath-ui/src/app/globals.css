@@ -86,24 +86,32 @@ a:hover { text-decoration: underline; }
   .cp-main { padding-bottom: 0; }
 }
 
-/* ── Sidebar (desktop only) ── */
+/* ── Sidebar (always flex; wrapper hides desktop-only instance) ── */
 .cp-sidebar {
-  display: none;
+  display: flex;
+  flex-direction: column;
 }
 @media (min-width: 768px) {
   .cp-sidebar {
-    display: flex;
     width: 256px;
     min-height: 100vh;
     background: #ffffff;
     border-right: 1px solid #e2e8f0;
     box-shadow: var(--shadow-sm);
-    flex-direction: column;
     flex-shrink: 0;
     position: sticky;
     top: 0;
     height: 100vh;
     overflow-y: auto;
+  }
+}
+
+.cp-sidebar-desktop {
+  display: none;
+}
+@media (min-width: 768px) {
+  .cp-sidebar-desktop {
+    display: flex;
   }
 }
 

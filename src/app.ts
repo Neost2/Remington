@@ -6,6 +6,7 @@ import { errorHandler, notFound } from './middleware/errorHandler';
 import { sanitizeBody } from './middleware/validate';
 import { config } from './config/env';
 
+import zipLookupRoutes from './routes/zipLookup.routes';
 import authRoutes from './routes/auth.routes';
 import patientRoutes from './routes/patient.routes';
 import driverRoutes from './routes/driver.routes';
@@ -69,6 +70,8 @@ app.get('/health', (_req, res) => {
 });
 
 // Routes
+
+app.use('/api/zip-lookup', zipLookupRoutes);
 
 app.use('/api/auth', authRoutes);
 app.use('/api/patients', patientRoutes);

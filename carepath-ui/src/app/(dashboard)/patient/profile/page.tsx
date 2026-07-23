@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useEffect, useState } from "react";
+import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import {
   Accessibility,
   AlertCircle,
@@ -13,6 +13,7 @@ import {
   Smartphone,
   User,
 } from "lucide-react";
+import { lookupZipCode } from "@/lib/zipLookup";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
@@ -23,25 +24,27 @@ const DEFAULT_API_BASE =
   "http://localhost:3000/api";
 
 type Form = {
-  county: string;
-  state: string;
-  zipCode: string;
-  primaryLanguage: string;
-  hasSmartphone: boolean;
-  prefersSms: boolean;
-  prefersVoice: boolean;
-  accessibilityRequirement: string;
-  schedulingConstraint: string;
-  defaultFundingSource: string;
-  primaryInsuranceProvider: string;
-  raceEthnicity: string;
-  disability: string;
-  incomeBracket: string;
-  barriers: string;
-  notes: string;
-};
+  city: string
+  county: string
+  state: string
+  zipCode: string
+  primaryLanguage: string
+  hasSmartphone: boolean
+  prefersSms: boolean
+  prefersVoice: boolean
+  accessibilityRequirement: string
+  schedulingConstraint: string
+  defaultFundingSource: string
+  primaryInsuranceProvider: string
+  raceEthnicity: string
+  disability: string
+  incomeBracket: string
+  barriers: string
+  notes: string
+}
 
 const initial: Form = {
+  city: "",
   county: "",
   state: "AR",
   zipCode: "",
@@ -58,7 +61,7 @@ const initial: Form = {
   incomeBracket: "",
   barriers: "",
   notes: "",
-};
+}
 
 type SectionHeadingProps = {
   icon: React.ReactNode;
@@ -131,6 +134,9 @@ export default function PatientProfilePage() {
   const [apiBase, setApiBase] = useState(DEFAULT_API_BASE);
   const [token, setToken] = useState("");
   const [form, setForm] = useState<Form>(initial);
+  const [zipLookupStatus, setZipLookupStatus] = useState<
+    "idle" | "loading" | "success" | "error"
+  >("idle");
   const [result, setResult] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
@@ -181,6 +187,7 @@ export default function PatientProfilePage() {
       const data = await response.json();
 
       setForm({
+        city: data.city ?? "",
         county: data.county ?? "",
         state: data.state ?? "AR",
         zipCode: data.zipCode ?? "",
@@ -253,6 +260,31 @@ export default function PatientProfilePage() {
       setSaving(false);
     }
   };
+
+  async function handleZipCodeChange(event: ChangeEvent<HTMLInputElement>) {
+    const zipCode = event.target.value;
+    set({ zipCode });
+
+    const digitsOnly = zipCode.trim().slice(0, 5);
+    if (!/^\d{5}$/.test(digitsOnly)) {
+      setZipLookupStatus("idle");
+      return;
+    }
+
+    setZipLookupStatus("loading");
+    const result = await lookupZipCode(digitsOnly);
+    if (result) {
+      setForm((current) => ({
+        ...current,
+        city: result.city,
+        county: result.county || current.county,
+        state: result.stateAbbreviation,
+      }));
+      setZipLookupStatus("success");
+    } else {
+      setZipLookupStatus("error");
+    }
+  }
 
   const cardStyle = {
     borderRadius: "14px",
@@ -497,7 +529,74 @@ export default function PatientProfilePage() {
               description="Keep your service area and communication preferences current."
             />
 
+            {error && (
+              <div className="cp-alert cp-alert-error">
+                <AlertCircle size={16} />
+                {error}
+              </div>
+            )}
+
+            {zipLookupStatus === "loading" && (
+              <div
+                className="cp-alert"
+                style={{
+                  borderRadius: "10px",
+                  border: "1px solid #cbd5e1",
+                  background: "#f8fafc",
+                  color: "#334155",
+                  padding: "10px 13px",
+                  fontSize: 14,
+                }}
+              >
+                Looking up city, county, and state…
+              </div>
+            )}
+            {zipLookupStatus === "success" && (
+              <div
+                className="cp-alert"
+                style={{
+                  borderRadius: "10px",
+                  border: "1px solid #86efac",
+                  background: "#f0fdf4",
+                  color: "#136e5e",
+                  padding: "10px 13px",
+                  fontSize: 14,
+                }}
+              >
+                City, county, and state auto-filled from ZIP code — edit any
+                field if needed.
+              </div>
+            )}
+            {zipLookupStatus === "error" && (
+              <div
+                className="cp-alert"
+                style={{
+                  borderRadius: "10px",
+                  border: "1px solid #fecaca",
+                  background: "#fef2f2",
+                  color: "#b91c1c",
+                  padding: "10px 13px",
+                  fontSize: 14,
+                }}
+              >
+                Couldn&apos;t look up that ZIP code. Please enter city, county,
+                and state manually.
+              </div>
+            )}
+
             <div className="cp-grid-2">
+              <div>
+                <label className="cp-label">City</label>
+                <input
+                  value={form.city}
+                  onChange={(event) =>
+                    set({ city: event.target.value })
+                  }
+                  placeholder="City"
+                  className="cp-input"
+                />
+              </div>
+
               <div>
                 <label className="cp-label">County</label>
                 <input
@@ -526,24 +625,8 @@ export default function PatientProfilePage() {
                 <label className="cp-label">ZIP code</label>
                 <input
                   value={form.zipCode}
-                  onChange={(event) =>
-                    set({ zipCode: event.target.value })
-                  }
+                  onChange={handleZipCodeChange}
                   placeholder="ZIP code"
-                  className="cp-input"
-                />
-              </div>
-
-              <div>
-                <label className="cp-label">
-                  Primary language
-                </label>
-                <input
-                  value={form.primaryLanguage}
-                  onChange={(event) =>
-                    set({ primaryLanguage: event.target.value })
-                  }
-                  placeholder="Primary language"
                   className="cp-input"
                 />
               </div>
@@ -553,6 +636,17 @@ export default function PatientProfilePage() {
               className="cp-grid-2"
               style={{ marginTop: "18px" }}
             >
+              <div>
+                <label className="cp-label">Primary language</label>
+                <input
+                  value={form.primaryLanguage}
+                  onChange={(event) =>
+                    set({ primaryLanguage: event.target.value })
+                  }
+                  placeholder="Primary language"
+                  className="cp-input"
+                />
+              </div>
               <label className="cp-checkbox-row">
                 <input
                   type="checkbox"

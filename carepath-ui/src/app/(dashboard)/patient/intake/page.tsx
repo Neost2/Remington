@@ -1,7 +1,8 @@
 "use client";
 
 import { Weight } from "lucide-react";
-import { FormEvent, useState } from "react";
+import { ChangeEvent, FormEvent, useState } from "react";
+import { lookupZipCode } from "@/lib/zipLookup";
 
 type Doctor = {
   id: string;
@@ -91,6 +92,41 @@ export default function PatientIntakePage() {
   const [emergencyContacts, setEmergencyContacts] = useState<
     EmergencyContact[]
   >([{ id: "contact-1" }]);
+
+  const [address, setAddress] = useState({
+    city: "",
+    county: "",
+    state: "",
+    zipCode: "",
+  });
+  const [zipLookupStatus, setZipLookupStatus] = useState<
+    "idle" | "loading" | "success" | "error"
+  >("idle");
+
+  async function handleZipCodeChange(event: ChangeEvent<HTMLInputElement>) {
+    const zipCode = event.target.value;
+    setAddress((current) => ({ ...current, zipCode }));
+
+    const digitsOnly = zipCode.trim().slice(0, 5);
+    if (!/^\d{5}$/.test(digitsOnly)) {
+      setZipLookupStatus("idle");
+      return;
+    }
+
+    setZipLookupStatus("loading");
+    const result = await lookupZipCode(digitsOnly);
+    if (result) {
+      setAddress((current) => ({
+        ...current,
+        city: result.city,
+        county: result.county || current.county,
+        state: result.stateAbbreviation,
+      }));
+      setZipLookupStatus("success");
+    } else {
+      setZipLookupStatus("error");
+    }
+  }
 
   function addDoctor() {
     setDoctors((currentDoctors) => [
@@ -252,6 +288,20 @@ export default function PatientIntakePage() {
               </label>
 
               <label className={labelStyles}>
+                ZIP Code
+                <input
+                  type="text"
+                  name="zipCode"
+                  required
+                  autoComplete="postal-code"
+                  placeholder="ZIP code"
+                  className={inputStyles}
+                  value={address.zipCode}
+                  onChange={handleZipCodeChange}
+                />
+              </label>
+
+              <label className={labelStyles}>
                 City
                 <input
                   type="text"
@@ -260,6 +310,13 @@ export default function PatientIntakePage() {
                   autoComplete="address-level2"
                   placeholder="City"
                   className={inputStyles}
+                  value={address.city}
+                  onChange={(event) =>
+                    setAddress((current) => ({
+                      ...current,
+                      city: event.target.value,
+                    }))
+                  }
                 />
               </label>
 
@@ -270,6 +327,13 @@ export default function PatientIntakePage() {
                   name="county"
                   placeholder="County"
                   className={inputStyles}
+                  value={address.county}
+                  onChange={(event) =>
+                    setAddress((current) => ({
+                      ...current,
+                      county: event.target.value,
+                    }))
+                  }
                 />
               </label>
 
@@ -282,20 +346,31 @@ export default function PatientIntakePage() {
                   autoComplete="address-level1"
                   placeholder="State"
                   className={inputStyles}
+                  value={address.state}
+                  onChange={(event) =>
+                    setAddress((current) => ({
+                      ...current,
+                      state: event.target.value,
+                    }))
+                  }
                 />
               </label>
 
-              <label className={labelStyles}>
-                ZIP Code
-                <input
-                  type="text"
-                  name="zipCode"
-                  required
-                  autoComplete="postal-code"
-                  placeholder="ZIP code"
-                  className={inputStyles}
-                />
-              </label>
+              {zipLookupStatus === "loading" && (
+                <p className="md:col-span-2 -mt-3 text-sm font-semibold text-slate-500">
+                  Looking up city, county, and state…
+                </p>
+              )}
+              {zipLookupStatus === "success" && (
+                <p className="md:col-span-2 -mt-3 text-sm font-semibold text-[#136e5e]">
+                  City, county, and state auto-filled from ZIP code — edit any field if needed.
+                </p>
+              )}
+              {zipLookupStatus === "error" && (
+                <p className="md:col-span-2 -mt-3 text-sm font-semibold text-red-600">
+                  Couldn&apos;t look up that ZIP code. Please enter city, county, and state manually.
+                </p>
+              )}
 
               <label className={`${labelStyles} md:col-span-2`}>
                 Date of Birth

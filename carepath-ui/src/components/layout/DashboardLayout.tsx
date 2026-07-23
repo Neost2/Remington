@@ -100,7 +100,9 @@ export function DashboardLayout({ children, role, title, subtitle, userName }: D
   return (
     <div className="cp-shell">
       {/* Desktop sidebar */}
-      <Sidebar role={role} userName={userName} />
+      <div className="cp-sidebar-desktop">
+        <Sidebar role={role} userName={userName} />
+      </div>
 
       {/* Mobile sidebar overlay */}
       {sidebarOpen && (
