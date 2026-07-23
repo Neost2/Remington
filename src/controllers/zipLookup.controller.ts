@@ -4,7 +4,8 @@ import { AppError } from '../middleware/errorHandler'
 
 export const lookupZipCode = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
-    const { zipCode } = req.params
+    let { zipCode } = req.params
+    if (zipCode) zipCode = zipCode.replace(/\/+$/, '')
 
     if (!zipCode || !/^\d{5}$/.test(zipCode)) {
       return next(new AppError('A valid 5-digit ZIP code is required.', 400))
