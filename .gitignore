@@ -7,3 +7,5 @@ infra/node_modules/
 infra/bin/
 .neon
 .agents/
+carepath-ui/out/
+carepath-ui/*.zip
