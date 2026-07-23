@@ -804,10 +804,10 @@ export default function PatientIntakePage() {
               {emergencyContacts.map((contact, index) => (
                 <div
                   key={contact.id}
-                  className="rounded-lg border border-rose-200 bg-[#fff9fa] p-5 sm:p-6"
+                  className="rounded-lg border border-purple-200 bg-[#fcf9fd] p-5 sm:p-6"
                 >
                   <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                    <h3 className="text-lg font-extrabold text-rose-700">
+                    <h3 className="text-lg font-extrabold text-[#703c91]">
                       Emergency Contact #{index + 1}
                     </h3>
 
@@ -817,7 +817,8 @@ export default function PatientIntakePage() {
                         onClick={() =>
                           removeEmergencyContact(contact.id)
                         }
-                        className="self-start rounded-md border border-red-200 bg-white px-5 py-3 text-sm font-bold text-red-600 transition hover:bg-red-50 sm:self-auto"
+                         className="mt-7 w-full rounded-lg border-2 border-dashed border-[#ae5a8b] bg-[#fdf6fa] px-8 py-4 text-base font-extrabold text-[#8f4773] transition hover:bg-[#f8eaf2]"
+
                       >
                         Remove Contact
                       </button>
@@ -865,7 +866,7 @@ export default function PatientIntakePage() {
             <button
               type="button"
               onClick={addEmergencyContact}
-              className="mt-7 w-full rounded-lg border-2 border-dashed border-rose-400 bg-rose-50 px-8 py-4 text-base font-extrabold text-rose-700 transition hover:bg-rose-100"
+                className="mt-7 w-full rounded-lg border-2 border-dashed border-[#ae5a8b] bg-[#fdf6fa] px-8 py-4 text-base font-extrabold text-[#8f4773] transition hover:bg-[#f8eaf2]"
               style={{
                 minHeight: "58px",
               }}
